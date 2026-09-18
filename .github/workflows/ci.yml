@@ -1,0 +1,23 @@
+name: Native MLIRQ
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install LLVM and MLIR 18
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build g++ libmlir-18-dev mlir-18-tools llvm-18-dev
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DMLIR_DIR=/usr/lib/llvm-18/lib/cmake/mlir -DLLVM_DIR=/usr/lib/llvm-18/lib/cmake/llvm -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build --parallel 2
+      - name: Native regression and numerical equivalence
+        run: ctest --test-dir build --output-on-failure

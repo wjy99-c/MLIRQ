@@ -1,0 +1,5 @@
+add_llvm_executable(mlirq-opt mlirq-opt.cpp)
+llvm_update_compile_flags(mlirq-opt)
+target_link_libraries(mlirq-opt PRIVATE MLIRQIR MLIRQTransforms MLIROptLib MLIRTransforms)
+mlir_check_all_link_libraries(mlirq-opt)
+install(TARGETS mlirq-opt RUNTIME DESTINATION bin)

@@ -1,0 +1,8 @@
+set(LLVM_TARGET_DEFINITIONS MLIRQOps.td)
+mlir_tablegen(MLIRQOps.h.inc -gen-op-decls)
+mlir_tablegen(MLIRQOps.cpp.inc -gen-op-defs)
+mlir_tablegen(MLIRQDialect.h.inc -gen-dialect-decls -dialect=mlirq)
+mlir_tablegen(MLIRQDialect.cpp.inc -gen-dialect-defs -dialect=mlirq)
+mlir_tablegen(MLIRQTypes.h.inc -gen-typedef-decls -typedefs-dialect=mlirq)
+mlir_tablegen(MLIRQTypes.cpp.inc -gen-typedef-defs -typedefs-dialect=mlirq)
+add_public_tablegen_target(MLIRQIRIncGen)

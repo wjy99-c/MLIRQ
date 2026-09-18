@@ -1,0 +1,117 @@
+# Design contract
+
+## Connection to the proposal
+
+The recovered MLIRQ design has four layers: L0 logical (IR-L), L1
+architecture-aware (IR-A), L2 backend lowering (IR-B), and L3 executable
+(IR-X). HALO supplies resource-sharing information. The July diagram called
+the learned backend-pattern component QRisk; the later proposal summary calls
+that component QLearn. This repository does not assume those research
+components have already been implemented.
+
+| Layer | Long-term responsibility | M0 implementation |
+| --- | --- | --- |
+| L0 / IR-L | Logical semantics and architecture-independent optimization | Typed, closed, straight-line circuit; ownership verifier; adjacent inverse cancellation |
+| L1 / IR-A | Placement, routing, resource constraints, coarse scheduling | Identity placement and static topology verification only |
+| L2 / IR-B | Native-gate decomposition, direction correction, fine scheduling | Not implemented |
+| L3 / IR-X | Backend output, timing/pulse validation, submission artifacts | Not implemented |
+
+The first two stages share a small dialect, with a checked `mlirq.stage`
+attribute distinguishing contracts. This is an incremental starting point;
+four nominal dialects with identical semantics would add complexity without
+providing the promised layer boundaries. Split representations as their
+operation sets and invariants actually diverge.
+
+## Quantum-state ownership
+
+`!mlirq.qubit` names a wire in the joint quantum state. It does not imply
+that the qubit has an independent statevector; entanglement is allowed.
+
+Each quantum operation consumes its input SSA values and returns successor
+wire values. Each quantum SSA result must have exactly one use. MLIR checks
+definition-before-use and block dominance; the circuit verifier checks
+linear use and circuit confinement. Every quantum wire ends in measurement
+or explicit discard.
+
+| Operation | Contract |
+| --- | --- |
+| `alloc` | Allocate a fresh wire in state zero; no qubit reuse in M0 |
+| `h`, `x`, `z` | Consume one wire, produce its successor |
+| `rz` | Apply diag(exp(-i angle/2), exp(i angle/2)); angle is a finite f64 in radians |
+| `cx` | Consume distinct control and target wires; results retain that wire order |
+| `measure` | Z-basis measurement returning i1 and consuming the wire |
+| `discard` | Trace out a wire; this is not an assertion that the state is zero |
+| `output` | Terminate the circuit, returning ordered classical bits |
+
+Measurement is terminal for its wire. Mid-circuit measurement with quantum
+continuation, feed-forward, reset/reuse, calls, block arguments, and control
+flow need explicit future semantics and are rejected by the current operation
+set or structural verifier.
+
+Quantum operations deliberately lack `Pure` and speculative-execution
+traits. Unknown effects conservatively prevent generic DCE/CSE from treating
+allocations or state transitions as ordinary reusable classical expressions.
+The test suite exercises generic CSE/canonicalization on two allocations.
+
+## Target contract
+
+An optional circuit attribute describes a static topology:
+
+```mlir
+mlirq.target = {
+  name = "synthetic-line-3",
+  num_qubits = 3 : i64,
+  coupling = array<i64: 0, 1, 1, 2>,
+  directed = false
+}
+```
+
+The flattened coupling array contains pairs. With `directed = true`, a
+pair permits CX only in the listed control-to-target direction. With
+`directed = false`, both directions are permitted. There are no implicit
+all-to-all edges. Self-edges, invalid indices, incomplete pairs, unknown
+fields, and malformed attribute types are errors.
+
+Identity placement assigns indices 0, 1, ... in allocation order separately
+for each circuit. It checks capacity and every CX before applying any
+placement to the module. Successfully mapped circuits receive
+`mlirq.stage = "architecture"`, and each allocation receives `physical`.
+Architecture-stage IR always revalidates target legality on parsing.
+
+Physical qubit reuse is deliberately unsupported, even after discard or
+measurement. This avoids silently assuming reset, isolation, or an ancilla
+lifetime policy that HALO has not yet supplied.
+
+## Pass contracts
+
+| Pass | Preconditions | Result / preserved invariants |
+| --- | --- | --- |
+| `mlirq-logical-opt` | Verified L0 circuits, stage absent or `logical` | Identical ideal behavior; valid linear SSA; removes adjacent unannotated inverse pairs |
+| `mlirq-map-identity` | Verified L0 circuits and complete topology | L1 placements satisfying capacity/connectivity/direction; wire order unchanged |
+| `mlirq-verify-target` | L1 circuit | Read-only legality check |
+
+The inverse-pair rewrite checks result/operand order and unique use for both
+CX wires. It does not commute operations, fuse rotations, cross intervening
+operations, or remove opaque annotations. Source locations remain attached
+to the surviving operations. Future metadata-sensitive rewrites must define
+how calibration, provenance, and learned-pattern annotations are preserved.
+
+## Extensibility decisions still needed
+
+- A generalized target interface needs explicit gate sets, duration units,
+  calibration snapshots, constraints, and resource ownership. The current
+  `TargetModel` is a topology contract, not that complete interface.
+- HALO requires allocation/lifetime/reset and isolation contracts before
+  physical reuse becomes legal.
+- QLearn needs a versioned pattern schema with backend, qubits, schedule,
+  observation window, evidence, and invalidation rules. Rewrites must preserve
+  ideal semantics and use fresh target knowledge.
+- Scheduling and pulse output must distinguish model estimates from measured
+  hardware behavior. M0 reports no fidelity or hardware-performance claims.
+
+## Upstream references
+
+- [MLIR dialect organization and CMake](https://mlir.llvm.org/docs/Tutorials/CreatingADialect/)
+- [MLIR operation definition specification](https://mlir.llvm.org/docs/DefiningDialects/Operations/)
+- [MLIR pass infrastructure](https://mlir.llvm.org/docs/PassManagement/)
+- [LLVM standalone example](https://github.com/llvm/llvm-project/tree/llvmorg-18.1.3/mlir/examples/standalone)
