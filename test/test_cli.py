@@ -78,7 +78,7 @@ def parse_generic_unitary(text):
         if gate in ("measure", "discard", "output"):
             terminal = True
             continue
-        if terminal or gate not in ("h", "x", "z", "sx", "rz", "cx", "cz", "swap"):
+        if terminal or gate not in ("h", "x", "z", "sx", "rz", "cx", "cz"):
             raise ValueError(f"unsupported numerical-oracle operation: {gate}")
         inputs = [wires[value.strip()] for value in operands.split(",")]
         if len(names) != len(inputs):
@@ -105,12 +105,6 @@ def statevector(n, events, basis=0):
             for i in range(len(state)):
                 if i & mask and not i & target:
                     state[i], state[i | target] = state[i | target], state[i]
-        elif gate == "swap":
-            other = 1 << wires[1]
-            for i in range(len(state)):
-                if i & mask and not i & other:
-                    j = i ^ mask ^ other
-                    state[i], state[j] = state[j], state[i]
         elif gate == "cz":
             target = 1 << wires[1]
             for i in range(len(state)):

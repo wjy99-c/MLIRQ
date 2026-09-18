@@ -15,12 +15,8 @@ struct TargetModel {
   bool directed = false;
   std::set<std::pair<int64_t, int64_t>> coupling;
   bool supportsCX(int64_t control, int64_t target) const;
-  bool supportsCZ(int64_t left, int64_t right) const;
-  // A SWAP must admit CX(a,b), CX(b,a), CX(a,b), without direction correction.
-  bool supportsSwap(int64_t left, int64_t right) const;
 };
 mlir::LogicalResult parseTarget(CircuitOp circuit, TargetModel &model);
-mlir::LogicalResult verifyRoutingMetadata(CircuitOp circuit);
 // Optional candidate allocations permit preflight before a mapping mutates IR.
 mlir::LogicalResult verifyMappedCircuit(
     CircuitOp circuit,

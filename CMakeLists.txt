@@ -35,7 +35,4 @@ if(BUILD_TESTING)
       --mlirq-opt $<TARGET_FILE:mlirq-opt>)
   add_test(NAME mlirq-qrisk-import
     COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/test/test_qrisk_import.py)
-  add_test(NAME mlirq-routing
-    COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/test/test_routing.py
-      --mlirq-opt $<TARGET_FILE:mlirq-opt>)
 endif()
