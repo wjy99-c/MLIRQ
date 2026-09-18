@@ -78,7 +78,7 @@ def parse_generic_unitary(text):
         if gate in ("measure", "discard", "output"):
             terminal = True
             continue
-        if terminal or gate not in ("h", "x", "z", "rz", "cx"):
+        if terminal or gate not in ("h", "x", "z", "sx", "rz", "cx", "cz"):
             raise ValueError(f"unsupported numerical-oracle operation: {gate}")
         inputs = [wires[value.strip()] for value in operands.split(",")]
         if len(names) != len(inputs):
@@ -105,6 +105,11 @@ def statevector(n, events, basis=0):
             for i in range(len(state)):
                 if i & mask and not i & target:
                     state[i], state[i | target] = state[i | target], state[i]
+        elif gate == "cz":
+            target = 1 << wires[1]
+            for i in range(len(state)):
+                if i & mask and i & target:
+                    state[i] = -state[i]
         elif gate == "rz":
             for i in range(len(state)):
                 state[i] *= cmath.exp((0.5j if i & mask else -0.5j) * angle)
@@ -120,6 +125,8 @@ def statevector(n, events, basis=0):
                     state[i], state[j] = v, u
                 elif gate == "z":
                     state[j] = -v
+                elif gate == "sx":
+                    state[i], state[j] = ((1 + 1j) * u + (1 - 1j) * v) / 2, ((1 - 1j) * u + (1 + 1j) * v) / 2
                 else:
                     raise ValueError(gate)
     return state

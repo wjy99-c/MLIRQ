@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "source_url": "https://github.com/qzydustin/qrisk",
+  "description": "Imported historical QRisk observations, not a current backend calibration or fidelity claim.",
+  "patterns": [
+    {
+      "id": "qrisk-ibm_fez-6830ed7d9cfa6fc5",
+      "backend": "ibm_fez",
+      "description": "Historical QRisk observation; hardware benefit and current applicability are unverified.",
+      "angle_tolerance": 1e-05,
+      "gates": [
+        {
+          "gate": "sx",
+          "qubits": [
+            3
+          ]
+        },
+        {
+          "gate": "cz",
+          "qubits": [
+            3,
+            4
+          ]
+        },
+        {
+          "gate": "rz",
+          "qubits": [
+            3
+          ],
+          "angle": -3.141593
+        },
+        {
+          "gate": "sx",
+          "qubits": [
+            4
+          ]
+        }
+      ],
+      "provenance": {
+        "source_revision": "c51b860505a06618371fd400f7da097c16689f01",
+        "backend_binding": "explicit input; checked against metadata where available",
+        "observation_count": 1,
+        "observations": [
+          {
+            "timestamp": "2026-06-17T15:06:00.829613",
+            "sources": [
+              {
+                "path": "artifacts/grover3-fez-O3-2_3_4_16/ddmin_reports/fez_20260617_150600.json",
+                "sha256": "60d2028939fb5da90ac4201b3db3dc56cf36708362fb8410c72f8cd63e919101",
+                "kind": "report"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "qrisk-ibm_kingston-eb9e96b82ceda246",
+      "backend": "ibm_kingston",
+      "description": "Historical QRisk observation; hardware benefit and current applicability are unverified.",
+      "angle_tolerance": 1e-05,
+      "gates": [
+        {
+          "gate": "rz",
+          "qubits": [
+            2
+          ],
+          "angle": -1.570796
+        },
+        {
+          "gate": "rz",
+          "qubits": [
+            2
+          ],
+          "angle": 1.570796
+        },
+        {
+          "gate": "rz",
+          "qubits": [
+            3
+          ],
+          "angle": -3.141593
+        },
+        {
+          "gate": "cz",
+          "qubits": [
+            2,
+            3
+          ]
+        }
+      ],
+      "provenance": {
+        "source_revision": "c51b860505a06618371fd400f7da097c16689f01",
+        "backend_binding": "explicit input; checked against metadata where available",
+        "observation_count": 1,
+        "observations": [
+          {
+            "timestamp": "2026-05-27T15:10:28.152733",
+            "sources": [
+              {
+                "path": "artifacts/grover3-kingston-O3-2_3_4_16/ddmin_reports/kingston_20260527_151028.json",
+                "sha256": "b625cbd28caa7cff3cc9f627b58562856b1af2184966fa929ca4dd9a811d6d2b",
+                "kind": "report"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "qrisk-ibm_marrakesh-7967a90279366ef6",
+      "backend": "ibm_marrakesh",
+      "description": "Historical QRisk observation; hardware benefit and current applicability are unverified.",
+      "angle_tolerance": 1e-05,
+      "gates": [
+        {
+          "gate": "sx",
+          "qubits": [
+            3
+          ]
+        },
+        {
+          "gate": "rz",
+          "qubits": [
+            3
+          ],
+          "angle": 0.392699
+        },
+        {
+          "gate": "rz",
+          "qubits": [
+            16
+          ],
+          "angle": 3.141593
+        },
+        {
+          "gate": "cz",
+          "qubits": [
+            3,
+            16
+          ]
+        }
+      ],
+      "provenance": {
+        "source_revision": "c51b860505a06618371fd400f7da097c16689f01",
+        "backend_binding": "explicit input; checked against metadata where available",
+        "observation_count": 1,
+        "observations": [
+          {
+            "timestamp": "2026-06-17T15:07:30.620285",
+            "sources": [
+              {
+                "path": "artifacts/grover3-marrakesh-O3-2_3_4_16/ddmin_reports/marrakesh_20260617_150730.json",
+                "sha256": "0dd856a264b6d1e97a7486b526eaaee0adac023edafde8987634e8758c97681b",
+                "kind": "report"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

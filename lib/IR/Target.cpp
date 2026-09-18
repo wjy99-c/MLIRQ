@@ -28,6 +28,7 @@ LogicalResult mlirq::parseTarget(CircuitOp circuit, TargetModel &model) {
     if (key != "name" && key != "num_qubits" && key != "coupling" && key != "directed")
       return circuit.emitOpError("unsupported target field: ") << key;
   }
+  model.name = name.getValue().str();
   model.numQubits = count.getInt();
   model.directed = directed.getValue();
   auto values = edges.asArrayRef();
@@ -77,6 +78,10 @@ LogicalResult mlirq::verifyMappedCircuit(
     }
     if (isa<CXOp>(op) && !target.supportsCX(inputs[0], inputs[1]))
       return op.emitOpError("CX violates target connectivity or direction; routing is required");
+    // CZ is symmetric even when the coupling data describes directed CX edges.
+    if (isa<CZOp>(op) && !target.coupling.count({inputs[0], inputs[1]}) &&
+        !target.coupling.count({inputs[1], inputs[0]}))
+      return op.emitOpError("CZ violates target connectivity; routing is required");
     unsigned wire = 0;
     for (Value result : op.getResults()) {
       if (isa<QubitType>(result.getType()))

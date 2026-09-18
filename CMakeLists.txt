@@ -30,4 +30,9 @@ if(BUILD_TESTING)
   add_test(NAME mlirq-regression
     COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/test/test_cli.py
       --mlirq-opt $<TARGET_FILE:mlirq-opt>)
+  add_test(NAME mlirq-qrisk
+    COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/test/test_qrisk.py
+      --mlirq-opt $<TARGET_FILE:mlirq-opt>)
+  add_test(NAME mlirq-qrisk-import
+    COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/test/test_qrisk_import.py)
 endif()

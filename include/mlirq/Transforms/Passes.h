@@ -6,6 +6,9 @@ namespace mlirq {
 std::unique_ptr<mlir::Pass> createLogicalOptPass();
 std::unique_ptr<mlir::Pass> createMapIdentityPass();
 std::unique_ptr<mlir::Pass> createVerifyTargetPass();
+std::unique_ptr<mlir::Pass> createQRiskScanPass();
+std::unique_ptr<mlir::Pass> createQRiskMitigatePass();
+void registerQRiskPasses();
 void registerMLIRQPasses();
 }
 #endif
