@@ -10,6 +10,14 @@ bool TargetModel::supportsCX(int64_t control, int64_t target) const {
          (!directed && coupling.count({target, control}));
 }
 
+bool TargetModel::supportsCZ(int64_t left, int64_t right) const {
+  return coupling.count({left, right}) || coupling.count({right, left});
+}
+
+bool TargetModel::supportsSwap(int64_t left, int64_t right) const {
+  return supportsCX(left, right) && supportsCX(right, left);
+}
+
 LogicalResult mlirq::parseTarget(CircuitOp circuit, TargetModel &model) {
   model = TargetModel{};
   auto target = circuit->getAttrOfType<DictionaryAttr>("mlirq.target");
@@ -79,9 +87,10 @@ LogicalResult mlirq::verifyMappedCircuit(
     if (isa<CXOp>(op) && !target.supportsCX(inputs[0], inputs[1]))
       return op.emitOpError("CX violates target connectivity or direction; routing is required");
     // CZ is symmetric even when the coupling data describes directed CX edges.
-    if (isa<CZOp>(op) && !target.coupling.count({inputs[0], inputs[1]}) &&
-        !target.coupling.count({inputs[1], inputs[0]}))
+    if (isa<CZOp>(op) && !target.supportsCZ(inputs[0], inputs[1]))
       return op.emitOpError("CZ violates target connectivity; routing is required");
+    if (isa<SwapOp>(op) && !target.supportsSwap(inputs[0], inputs[1]))
+      return op.emitOpError("SWAP requires connectivity supporting CX in both directions");
     unsigned wire = 0;
     for (Value result : op.getResults()) {
       if (isa<QubitType>(result.getType()))

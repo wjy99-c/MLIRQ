@@ -26,11 +26,13 @@ The repetition is constructed for a regression test; it is not an upstream
 benchmark circuit. Its topology records only the observed edge and historical
 156-qubit capacity, not a full or current device configuration.
 
-For logical input, first run logical optimization and physical mapping. Run
+For logical input, first run logical optimization and `--mlirq-route` (or
+`--mlirq-map-identity` when routing is unnecessary). Run
 the QRisk pass after the gate representation matches the catalog. Later
 rewrites or native lowering can recreate patterns, so scan again after them.
-Full backend lowering, routing, scheduling, and executable output are not
-implemented by this increment.
+SWAPs are barriers to QRisk rewrites; the routing permutation remains checked
+after mitigation. Full backend lowering, scheduling, and executable output
+remain future milestones.
 
 ## Included observations and provenance
 
@@ -134,7 +136,7 @@ commutation is known to be exact, including global phase. The whitelist is:
 
 H/Z on the same wire, X on a CX control, SX/CZ on a shared wire, and other
 unproven cases remain unchanged. Allocations, measurement, discard, and
-opaque gate annotations are barriers, including on spectator wires.
+opaque gate annotations and SWAPs are barriers, including on spectator wires.
 
 Every candidate is rescanned against **all active backend patterns**. It is
 accepted only if the total occurrence count strictly decreases and no active

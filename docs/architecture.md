@@ -10,10 +10,10 @@ that component QLearn. This repository does not assume those research
 components have already been implemented in full. The QRisk integration
 described below implements the initial pattern-guided compilation path.
 
-| Layer | Long-term responsibility | M0 implementation |
+| Layer | Long-term responsibility | Current implementation |
 | --- | --- | --- |
 | L0 / IR-L | Logical semantics and architecture-independent optimization | Typed, closed, straight-line circuit; ownership verifier; adjacent inverse cancellation |
-| L1 / IR-A | Placement, routing, resource constraints, coarse scheduling | Identity placement, topology verification, backend-specific QRisk matching and commuting rewrites |
+| L1 / IR-A | Placement, routing, resource constraints, coarse scheduling | Placement, SWAP routing, verified final permutation, topology verification, backend-specific QRisk matching and commuting rewrites |
 | L2 / IR-B | Native-gate decomposition, direction correction, fine scheduling | Not implemented |
 | L3 / IR-X | Backend output, timing/pulse validation, submission artifacts | Not implemented |
 
@@ -36,18 +36,19 @@ or explicit discard.
 
 | Operation | Contract |
 | --- | --- |
-| `alloc` | Allocate a fresh wire in state zero; no qubit reuse in M0 |
+| `alloc` | Allocate a fresh wire in state zero; no physical qubit reuse |
 | `h`, `x`, `z` | Consume one wire, produce its successor |
 | `sx` | Positive square root of X: ((1+i) I + (1-i) X) / 2, including its global phase |
 | `rz` | Apply diag(exp(-i angle/2), exp(i angle/2)); angle is a finite f64 in radians |
 | `cx` | Consume distinct control and target wires; results retain that wire order |
 | `cz` | Apply diag(1,1,1,-1) to distinct wires; results retain operand order |
+| `swap` | Exchange quantum states of distinct wires; results retain physical operand order |
 | `measure` | Z-basis measurement returning i1 and consuming the wire |
 | `discard` | Trace out a wire; this is not an assertion that the state is zero |
 | `output` | Terminate the circuit, returning ordered classical bits |
 
-Measurement is terminal for its wire. Mid-circuit measurement with quantum
-continuation, feed-forward, reset/reuse, calls, block arguments, and control
+Measurement is terminal for its wire. Continuing that quantum wire,
+feed-forward, reset/reuse, calls, block arguments, and control
 flow need explicit future semantics and are rejected by the current operation
 set or structural verifier.
 
@@ -76,7 +77,9 @@ all-to-all edges. Self-edges, invalid indices, incomplete pairs, unknown
 fields, and malformed attribute types are errors.
 
 CZ requires a listed coupling edge in either orientation because it is
-symmetric. These are topology checks; accepting `sx` or `cz` does not assert
+symmetric. SWAP requires both CX directions, allowing a future three-CX
+decomposition without direction correction. These are topology checks;
+accepting `sx`, `cz`, or `swap` does not assert
 that every named backend natively supports the dialect's full gate set.
 
 Identity placement assigns indices 0, 1, ... in allocation order separately
@@ -84,6 +87,13 @@ for each circuit. It checks capacity and every CX before applying any
 placement to the module. Successfully mapped circuits receive
 `mlirq.stage = "architecture"`, and each allocation receives `physical`.
 Architecture-stage IR always revalidates target legality on parsing.
+
+The alternative `mlirq-route` pass starts from logical IR, chooses identity
+or explicitly supplied initial placement, and inserts legal physical SWAPs.
+Logical states follow the updated placement; physical SSA results retain
+operand order. The circuit's `mlirq.routing` record contains original and
+auxiliary initial/final layouts. A separate verifier replays marked routing
+SWAPs and rejects an inconsistent permutation. See [routing.md](routing.md).
 
 Physical qubit reuse is deliberately unsupported, even after discard or
 measurement. This avoids silently assuming reset, isolation, or an ancilla
@@ -95,7 +105,8 @@ lifetime policy that HALO has not yet supplied.
 | --- | --- | --- |
 | `mlirq-logical-opt` | Verified L0 circuits, stage absent or `logical` | Identical ideal behavior; valid linear SSA; removes adjacent unannotated inverse pairs |
 | `mlirq-map-identity` | Verified L0 circuits and complete topology | L1 placements satisfying capacity/connectivity/direction; wire order unchanged |
-| `mlirq-verify-target` | L1 circuit | Read-only legality check |
+| `mlirq-route` | Verified L0 circuits and complete topology | L1 circuit with legal SWAP routes, preserved logical behavior/output order, verified final placement |
+| `mlirq-verify-target` | L1 circuit | Read-only topology and routing-permutation check |
 | `mlirq-qrisk-scan` | L1 circuit and local pattern catalog | Report exact-backend, physical-wire occurrences; no gate changes |
 | `mlirq-qrisk-mitigate` | L1 circuit and local pattern catalog | Exact commuting reorders; lower total occurrences without increasing any active pattern; unresolved hits reported |
 
@@ -107,7 +118,7 @@ how calibration, provenance, and learned-pattern annotations are preserved.
 
 The QRisk pass runs on physically mapped IR, tracks physical wire identity
 through SSA, and rebuilds the quantum operands after a reorder. Allocations,
-measurements, discards, and opaque gate annotations are barriers. It verifies
+measurements, discards, SWAPs, and opaque gate annotations are barriers. It verifies
 the transformed module before committing any changes. Its matcher is a
 scoped, ordered gate trace rather than a noise model or scheduler. See
 [qrisk.md](qrisk.md) for the schema, upstream differences, and exact identities.

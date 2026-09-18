@@ -57,6 +57,14 @@ def MLIRQ_CZOp : MLIRQ_Op<"cz", [HasParent<"CircuitOp">]> {
   let hasVerifier = 1;
 }
 
+def MLIRQ_SwapOp : MLIRQ_Op<"swap", [HasParent<"CircuitOp">]> {
+  let summary = "Exchange quantum states; results retain physical operand order";
+  let arguments = (ins MLIRQ_Qubit:$left, MLIRQ_Qubit:$right);
+  let results = (outs MLIRQ_Qubit:$left_out, MLIRQ_Qubit:$right_out);
+  let assemblyFormat = "$left `,` $right attr-dict `:` type($left_out) `,` type($right_out)";
+  let hasVerifier = 1;
+}
+
 def MLIRQ_MeasureOp : MLIRQ_Op<"measure", [HasParent<"CircuitOp">]> {
   let summary = "Terminal Z-basis measurement, consuming the quantum wire";
   let arguments = (ins MLIRQ_Qubit:$qubit);
