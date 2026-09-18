@@ -7,12 +7,13 @@ architecture-aware (IR-A), L2 backend lowering (IR-B), and L3 executable
 (IR-X). HALO supplies resource-sharing information. The July diagram called
 the learned backend-pattern component QRisk; the later proposal summary calls
 that component QLearn. This repository does not assume those research
-components have already been implemented.
+components have already been implemented in full. The QRisk integration
+described below implements the initial pattern-guided compilation path.
 
 | Layer | Long-term responsibility | M0 implementation |
 | --- | --- | --- |
 | L0 / IR-L | Logical semantics and architecture-independent optimization | Typed, closed, straight-line circuit; ownership verifier; adjacent inverse cancellation |
-| L1 / IR-A | Placement, routing, resource constraints, coarse scheduling | Identity placement and static topology verification only |
+| L1 / IR-A | Placement, routing, resource constraints, coarse scheduling | Identity placement, topology verification, backend-specific QRisk matching and commuting rewrites |
 | L2 / IR-B | Native-gate decomposition, direction correction, fine scheduling | Not implemented |
 | L3 / IR-X | Backend output, timing/pulse validation, submission artifacts | Not implemented |
 
@@ -37,8 +38,10 @@ or explicit discard.
 | --- | --- |
 | `alloc` | Allocate a fresh wire in state zero; no qubit reuse in M0 |
 | `h`, `x`, `z` | Consume one wire, produce its successor |
+| `sx` | Positive square root of X: ((1+i) I + (1-i) X) / 2, including its global phase |
 | `rz` | Apply diag(exp(-i angle/2), exp(i angle/2)); angle is a finite f64 in radians |
 | `cx` | Consume distinct control and target wires; results retain that wire order |
+| `cz` | Apply diag(1,1,1,-1) to distinct wires; results retain operand order |
 | `measure` | Z-basis measurement returning i1 and consuming the wire |
 | `discard` | Trace out a wire; this is not an assertion that the state is zero |
 | `output` | Terminate the circuit, returning ordered classical bits |
@@ -72,6 +75,10 @@ pair permits CX only in the listed control-to-target direction. With
 all-to-all edges. Self-edges, invalid indices, incomplete pairs, unknown
 fields, and malformed attribute types are errors.
 
+CZ requires a listed coupling edge in either orientation because it is
+symmetric. These are topology checks; accepting `sx` or `cz` does not assert
+that every named backend natively supports the dialect's full gate set.
+
 Identity placement assigns indices 0, 1, ... in allocation order separately
 for each circuit. It checks capacity and every CX before applying any
 placement to the module. Successfully mapped circuits receive
@@ -89,12 +96,21 @@ lifetime policy that HALO has not yet supplied.
 | `mlirq-logical-opt` | Verified L0 circuits, stage absent or `logical` | Identical ideal behavior; valid linear SSA; removes adjacent unannotated inverse pairs |
 | `mlirq-map-identity` | Verified L0 circuits and complete topology | L1 placements satisfying capacity/connectivity/direction; wire order unchanged |
 | `mlirq-verify-target` | L1 circuit | Read-only legality check |
+| `mlirq-qrisk-scan` | L1 circuit and local pattern catalog | Report exact-backend, physical-wire occurrences; no gate changes |
+| `mlirq-qrisk-mitigate` | L1 circuit and local pattern catalog | Exact commuting reorders; lower total occurrences without increasing any active pattern; unresolved hits reported |
 
 The inverse-pair rewrite checks result/operand order and unique use for both
 CX wires. It does not commute operations, fuse rotations, cross intervening
 operations, or remove opaque annotations. Source locations remain attached
 to the surviving operations. Future metadata-sensitive rewrites must define
 how calibration, provenance, and learned-pattern annotations are preserved.
+
+The QRisk pass runs on physically mapped IR, tracks physical wire identity
+through SSA, and rebuilds the quantum operands after a reorder. Allocations,
+measurements, discards, and opaque gate annotations are barriers. It verifies
+the transformed module before committing any changes. Its matcher is a
+scoped, ordered gate trace rather than a noise model or scheduler. See
+[qrisk.md](qrisk.md) for the schema, upstream differences, and exact identities.
 
 ## Extensibility decisions still needed
 
@@ -103,9 +119,9 @@ how calibration, provenance, and learned-pattern annotations are preserved.
   `TargetModel` is a topology contract, not that complete interface.
 - HALO requires allocation/lifetime/reset and isolation contracts before
   physical reuse becomes legal.
-- QLearn needs a versioned pattern schema with backend, qubits, schedule,
-  observation window, evidence, and invalidation rules. Rewrites must preserve
-  ideal semantics and use fresh target knowledge.
+- QRisk now has a versioned import schema with backend, physical qubits,
+  parameters, and observation provenance. Schedule-aware identity, calibration
+  freshness/invalidation, and hardware improvement evaluation remain open.
 - Scheduling and pulse output must distinguish model estimates from measured
   hardware behavior. M0 reports no fidelity or hardware-performance claims.
 

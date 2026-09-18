@@ -30,6 +30,9 @@ class MLIRQ_UnaryGate<string mnemonic> : MLIRQ_Op<mnemonic, [HasParent<"CircuitO
 def MLIRQ_HOp : MLIRQ_UnaryGate<"h">;
 def MLIRQ_XOp : MLIRQ_UnaryGate<"x">;
 def MLIRQ_ZOp : MLIRQ_UnaryGate<"z">;
+def MLIRQ_SXOp : MLIRQ_UnaryGate<"sx"> {
+  let summary = "Positive square root of X: ((1+i) I + (1-i) X) / 2";
+}
 
 def MLIRQ_RzOp : MLIRQ_Op<"rz", [HasParent<"CircuitOp">]> {
   let arguments = (ins MLIRQ_Qubit:$input, F64Attr:$angle);
@@ -40,6 +43,14 @@ def MLIRQ_RzOp : MLIRQ_Op<"rz", [HasParent<"CircuitOp">]> {
 
 def MLIRQ_CXOp : MLIRQ_Op<"cx", [HasParent<"CircuitOp">]> {
   let summary = "Controlled X; results retain control/target wire order";
+  let arguments = (ins MLIRQ_Qubit:$control, MLIRQ_Qubit:$target);
+  let results = (outs MLIRQ_Qubit:$control_out, MLIRQ_Qubit:$target_out);
+  let assemblyFormat = "$control `,` $target attr-dict `:` type($control_out) `,` type($target_out)";
+  let hasVerifier = 1;
+}
+
+def MLIRQ_CZOp : MLIRQ_Op<"cz", [HasParent<"CircuitOp">]> {
+  let summary = "Controlled Z, diag(1,1,1,-1); results retain operand order";
   let arguments = (ins MLIRQ_Qubit:$control, MLIRQ_Qubit:$target);
   let results = (outs MLIRQ_Qubit:$control_out, MLIRQ_Qubit:$target_out);
   let assemblyFormat = "$control `,` $target attr-dict `:` type($control_out) `,` type($target_out)";

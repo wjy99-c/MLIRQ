@@ -23,7 +23,7 @@ LogicalResult CircuitOp::verifyRegions() {
 
   llvm::DenseSet<int64_t> physicalIds;
   for (Operation &op : block) {
-    if (!isa<AllocOp, HOp, XOp, ZOp, RzOp, CXOp, MeasureOp, DiscardOp, OutputOp>(op))
+    if (!isa<AllocOp, HOp, XOp, ZOp, SXOp, RzOp, CXOp, CZOp, MeasureOp, DiscardOp, OutputOp>(op))
       return op.emitOpError("is not supported in a straight-line MLIRQ circuit");
     for (Value result : op.getResults()) {
       if (!isa<QubitType>(result.getType()))
@@ -72,5 +72,11 @@ LogicalResult RzOp::verify() {
 LogicalResult CXOp::verify() {
   if (getControl() == getTarget())
     return emitOpError("control and target must be distinct quantum wires");
+  return success();
+}
+
+LogicalResult CZOp::verify() {
+  if (getControl() == getTarget())
+    return emitOpError("requires distinct quantum wires");
   return success();
 }

@@ -4,11 +4,13 @@
 #include "llvm/ADT/DenseMap.h"
 #include <cstdint>
 #include <set>
+#include <string>
 #include <utility>
 
 namespace mlirq {
 // Initial topology contract. No live calibration, pulse, or vendor claims.
 struct TargetModel {
+  std::string name;
   int64_t numQubits = 0;
   bool directed = false;
   std::set<std::pair<int64_t, int64_t>> coupling;

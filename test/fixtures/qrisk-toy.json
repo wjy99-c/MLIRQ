@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "source_url": "unknown",
+  "description": "Fabricated QRisk integration fixtures. These are not measured hardware noise patterns.",
+  "patterns": [
+    {
+      "id": "toy-alpha-rz-cx-x",
+      "backend": "toy_backend_alpha",
+      "description": "An arbitrary Rz on control, CX, then X on target; commute control phase past CX.",
+      "gates": [
+        {"gate": "rz", "qubits": [0]},
+        {"gate": "cx", "qubits": [0, 1]},
+        {"gate": "x", "qubits": [1]}
+      ]
+    },
+    {
+      "id": "toy-alpha-z-cx",
+      "backend": "toy_backend_alpha",
+      "description": "Z on the control commutes with CX.",
+      "gates": [
+        {"gate": "z", "qubits": [0]},
+        {"gate": "cx", "qubits": [0, 1]}
+      ]
+    },
+    {
+      "id": "toy-beta-cx-x",
+      "backend": "toy_backend_beta",
+      "description": "X on the target commutes with CX. This pattern is inactive on alpha.",
+      "gates": [
+        {"gate": "cx", "qubits": [0, 1]},
+        {"gate": "x", "qubits": [1]}
+      ]
+    }
+  ]
+}
