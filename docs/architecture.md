@@ -25,22 +25,35 @@ operation sets and invariants actually diverge.
 
 ## Backend compilation boundary
 
-Qiskit's transpiler will supply placement, routing, and native-gate translation
-through a planned adapter. The custom M1 router and its SWAP operation have
-been removed. The L1/L2 contracts remain useful for describing and verifying
-compiled circuits; they do not require MLIRQ to implement those algorithms.
-The adapter is not yet implemented.
+M1 accepts a Qiskit `QuantumCircuit` that the caller has already compiled for
+a specific backend, together with the exact backend identity, its target, and
+a QRisk catalog. It returns a Qiskit circuit with equivalent ideal behavior
+and fewer matched occurrences where a supported rewrite is available, plus a
+structured report. The first input subset is static, parameter-bound circuits
+after gate optimization and before timing scheduling. The detailed task list
+and acceptance criteria are in [roadmap.md](roadmap.md).
 
-The adapter must preserve physical qubit indices, initial and final layouts,
-ordered classical outputs, and global phase, and explicitly reject unsupported
-operations. Backend instruction legality must be checked separately from the
-current topology verifier. Round-trip and equivalence tests must account for
-layout changes and any introduced auxiliary qubits.
+The planned adapter imports this circuit directly into physically mapped
+`mlirq.stage = "architecture"` IR, invokes the QRisk passes, and exports the
+result. This path does not invoke logical optimization, identity mapping,
+routing, gate lowering, or Qiskit's transpiler. The custom router remains
+removed. The four-layer proposal above is the longer-term design; M1 reuses
+the current physical IR without requiring new L2/L3 dialects first.
 
-QRisk mitigation should follow Qiskit's gate translation and optimization,
-once the physical gate sequence matches the backend catalog. Any subsequent
-gate rewrite requires another scan. MLIRQ owns the common IR, QRisk matching
-and equivalent transformations, and verification across the conversion boundary.
+Conversion must preserve physical indices, circuit width and idle/auxiliary
+wires, Qiskit's existing layout metadata, classical registers and measurement
+destinations, global phase, and barriers. Existing layout permutations are
+provenance to preserve, not instructions to remap the compiled circuit again.
+Gate instruction legality must be checked against the supplied Qiskit target
+before and after optimization, separately from the current topology verifier.
+Unsupported operations or timing semantics must be rejected explicitly.
+
+The native matcher and commuting rewrites are implemented; Qiskit circuit
+conversion and end-to-end validation are not. Native IR annotations already
+act as rewrite barriers, but Qiskit barrier conversion still needs implementation.
+Any later gate rewrite requires another pattern scan on the final sequence.
+MLIRQ owns the pattern transformations and verification at this boundary;
+hardware execution and measured fidelity evaluation are later work.
 
 ## Quantum-state ownership
 
@@ -104,7 +117,7 @@ placement to the module. Successfully mapped circuits receive
 `mlirq.stage = "architecture"`, and each allocation receives `physical`.
 Architecture-stage IR always revalidates target legality on parsing.
 This utility cannot repair non-neighbor interactions; it remains useful for
-small examples and tests while the Qiskit adapter is developed.
+small examples and tests. M1 imports existing placement and does not run it.
 
 Physical qubit reuse is deliberately unsupported, even after discard or
 measurement. This avoids silently assuming reset, isolation, or an ancilla

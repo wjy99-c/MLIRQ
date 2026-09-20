@@ -27,14 +27,18 @@ benchmark circuit. Its topology records only the observed edge and historical
 156-qubit capacity, not a full or current device configuration.
 
 The current pass requires already physically mapped IR whose gate
-representation matches the catalog. `--mlirq-map-identity` supports simple
-logical examples only when their interactions already fit the target topology;
-the custom M1 router has been removed.
+representation matches the catalog. M1 will accept a Qiskit circuit that the
+caller has already compiled for its backend, import that existing physical
+placement, run these passes, and return a Qiskit circuit plus a report.
+The circuit importer/exporter and end-to-end API are not yet implemented.
+See [roadmap.md](roadmap.md) for checked implementation status and TODOs.
 
-The planned Qiskit adapter will supply placement, routing, and native-gate
-translation. Run QRisk after Qiskit translation and optimization. Later gate
-rewrites can recreate patterns, so scan again after them. The adapter,
-scheduling, and executable output are not implemented by this increment.
+For M1, Qiskit performs layout, routing, translation, and optimization before
+MLIRQ receives the circuit. The initial subset excludes timing-scheduled
+circuits. MLIRQ does not rerun Qiskit's transpiler or identity mapping.
+`--mlirq-map-identity` remains a utility for simple native-IR tests; the custom
+router remains removed. Later gate rewrites can recreate patterns, so scan
+again after them. Scheduling and hardware execution remain outside M1.
 
 ## Included observations and provenance
 

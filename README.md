@@ -3,12 +3,25 @@
 Native MLIR foundations for **A Unified Compiler Infrastructure for
 Heterogeneous Quantum Architectures**.
 
-MLIRQ provides a C++/TableGen quantum dialect, ownership verification,
-logical optimization, an initial architecture contract, and backend-specific
-[QRisk](https://github.com/qzydustin/qrisk) pattern scanning and disruption.
-It accepts textual MLIR and produces verified textual MLIR. Routing and
-native-gate lowering will be delegated to Qiskit through a planned adapter.
-That adapter, hardware execution, and HALO are not yet implemented.
+MLIRQ's first milestone is a **post-Qiskit compilation pass**: take a circuit
+that Qiskit has already compiled for a backend, apply equivalent transformations
+to reduce occurrences of that backend's [QRisk](https://github.com/qzydustin/qrisk)
+patterns, and return an optimized Qiskit circuit with a before/after report.
+
+| Boundary | M1 contract |
+| --- | --- |
+| Input | A backend-compiled Qiskit `QuantumCircuit`, its exact backend identity and target, and a QRisk pattern catalog |
+| Processing | Match backend/physical-qubit patterns and apply semantics-preserving commuting reorders |
+| Output | A Qiskit `QuantumCircuit` for the same target, preserving physical placement, measurement mapping, and ideal semantics, plus pattern counts and unresolved matches |
+
+The first supported input subset will be static circuits with bound parameters,
+after Qiskit's layout, routing, gate translation, and optimization, before timing
+scheduling. The caller performs Qiskit compilation before invoking MLIRQ.
+MLIRQ does not rerun those stages in this workflow.
+
+**Current status: M1 is partially implemented.** The native C++/TableGen MLIR
+core already scans and mitigates patterns in physically mapped textual MLIR.
+The Qiskit circuit importer, exporter, and end-to-end API are still TODO.
 
 ## Implemented
 
@@ -100,18 +113,26 @@ fidelity improvement is claimed. See [docs/qrisk.md](docs/qrisk.md) for the
 catalog, import commands, matching rules, and remaining limits. Toy patterns
 remain only in the regression fixtures.
 
-## Next implementation milestone
+## M1: post-Qiskit pattern mitigation
 
-Implement a Qiskit adapter that delegates placement, routing, and native-gate
-translation to Qiskit's transpiler. Preserve physical qubit identities, initial
-and final layouts, ordered measurement outputs, and global phase across the
-conversion, and validate the supported circuit subset end to end.
+- [x] Import backend-specific QRisk pattern data and observation provenance.
+- [x] Match patterns by backend, physical qubits, gate order, and parameters.
+- [x] Apply equivalent commuting rewrites and report reduced/unresolved occurrences.
+- [x] Verify the native IR with toy and imported-pattern regression tests.
+- [ ] Accept a compiled Qiskit circuit and its backend/target without remapping it.
+- [ ] Preserve circuit width, layouts, phase, classical-bit mapping, and barriers during conversion.
+- [ ] Return an optimized Qiskit circuit and a structured report; validate native instructions before and after.
+- [ ] Add Qiskit round-trip/equivalence tests, an end-to-end example, and CI coverage.
 
-The custom M1 router has been removed. MLIRQ retains the common IR, independent
-verification, and backend-specific QRisk transformations. Run QRisk on the
-resulting physical gate sequence after Qiskit translation and optimization;
-rescan if later compilation changes that sequence. The staged design and
-acceptance criteria are in [docs/architecture.md](docs/architecture.md) and
-[docs/roadmap.md](docs/roadmap.md).
+Checked items describe the existing native core; they do not imply the complete
+Qiskit workflow is available. The ordered task list, supported input scope, and
+completion criteria are in [docs/roadmap.md](docs/roadmap.md). M1 is complete when
+a caller can pass in Qiskit's compiled circuit and receive the verified optimized
+circuit plus report. Blocked patterns remain visible; zero occurrences are not
+guaranteed for every circuit. Hardware fidelity evaluation follows this milestone.
+
+The custom router remains removed. Logical optimization and identity mapping
+are foundation utilities, outside the M1 post-compilation path. See
+[docs/architecture.md](docs/architecture.md) for the internal IR contract.
 
 Local build and test evidence is recorded in [docs/validation.md](docs/validation.md).
