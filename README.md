@@ -21,7 +21,8 @@ MLIRQ does not rerun those stages in this workflow.
 
 **Current status: M1 is partially implemented.** The native C++/TableGen MLIR
 core already scans and mitigates patterns in physically mapped textual MLIR.
-The Qiskit circuit importer, exporter, and end-to-end API are still TODO.
+The Python/native bridge and Qiskit circuit importer (T1/T2) are implemented.
+Qiskit circuit export and the complete optimization API remain TODO.
 
 ## Implemented
 
@@ -119,13 +120,13 @@ remain only in the regression fixtures.
 - [x] Match patterns by backend, physical qubits, gate order, and parameters.
 - [x] Apply equivalent commuting rewrites and report reduced/unresolved occurrences.
 - [x] Verify the native IR with toy and imported-pattern regression tests.
-- [ ] Accept a compiled Qiskit circuit and its backend/target without remapping it.
+- [x] Accept a compiled Qiskit circuit and its backend/target without remapping it.
 - [ ] Preserve circuit width, layouts, phase, classical-bit mapping, and barriers during conversion.
 - [ ] Return an optimized Qiskit circuit and a structured report; validate native instructions before and after.
 - [ ] Add Qiskit round-trip/equivalence tests, an end-to-end example, and CI coverage.
 
-Checked items describe the existing native core; they do not imply the complete
-Qiskit workflow is available. The ordered task list, supported input scope, and
+Checked items describe the existing components; the complete Qiskit-to-Qiskit
+workflow is still in progress. The ordered task list, supported input scope, and
 completion criteria are in [docs/roadmap.md](docs/roadmap.md). M1 is complete when
 a caller can pass in Qiskit's compiled circuit and receive the verified optimized
 circuit plus report. Blocked patterns remain visible; zero occurrences are not
@@ -136,3 +137,22 @@ are foundation utilities, outside the M1 post-compilation path. See
 [docs/architecture.md](docs/architecture.md) for the internal IR contract.
 
 Local build and test evidence is recorded in [docs/validation.md](docs/validation.md).
+
+## Python importer and native bridge (T1/T2)
+
+After building the native compiler, install the Python package and run the
+offline import example:
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install .
+.venv/bin/python examples/import-qiskit.py --mlirq-opt build/bin/mlirq-opt
+```
+
+`import_compiled_circuit()` accepts an already-compiled Qiskit circuit, exact
+backend name, target, and pattern catalog. It preserves physical indices and
+the full circuit width in native IR, with isolated snapshots of the input
+context. `NativeCompiler.run()` verifies, scans, or mitigates that IR and
+returns a native result. Qiskit export follows in T4. See
+[docs/qiskit-adapter.md](docs/qiskit-adapter.md) for the API, supported input
+subset, errors, and tests.
