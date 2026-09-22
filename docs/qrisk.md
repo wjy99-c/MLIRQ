@@ -26,11 +26,19 @@ The repetition is constructed for a regression test; it is not an upstream
 benchmark circuit. Its topology records only the observed edge and historical
 156-qubit capacity, not a full or current device configuration.
 
-For logical input, first run logical optimization and physical mapping. Run
-the QRisk pass after the gate representation matches the catalog. Later
-rewrites or native lowering can recreate patterns, so scan again after them.
-Full backend lowering, routing, scheduling, and executable output are not
-implemented by this increment.
+The current pass requires already physically mapped IR whose gate
+representation matches the catalog. M1 will accept a Qiskit circuit that the
+caller has already compiled for its backend, import that existing physical
+placement, run these passes, and return a Qiskit circuit plus a report.
+The circuit importer/exporter and end-to-end API are not yet implemented.
+See [roadmap.md](roadmap.md) for checked implementation status and TODOs.
+
+For M1, Qiskit performs layout, routing, translation, and optimization before
+MLIRQ receives the circuit. The initial subset excludes timing-scheduled
+circuits. MLIRQ does not rerun Qiskit's transpiler or identity mapping.
+`--mlirq-map-identity` remains a utility for simple native-IR tests; the custom
+router remains removed. Later gate rewrites can recreate patterns, so scan
+again after them. Scheduling and hardware execution remain outside M1.
 
 ## Included observations and provenance
 

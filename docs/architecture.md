@@ -10,7 +10,7 @@ that component QLearn. This repository does not assume those research
 components have already been implemented in full. The QRisk integration
 described below implements the initial pattern-guided compilation path.
 
-| Layer | Long-term responsibility | M0 implementation |
+| Layer | Long-term responsibility | Current implementation |
 | --- | --- | --- |
 | L0 / IR-L | Logical semantics and architecture-independent optimization | Typed, closed, straight-line circuit; ownership verifier; adjacent inverse cancellation |
 | L1 / IR-A | Placement, routing, resource constraints, coarse scheduling | Identity placement, topology verification, backend-specific QRisk matching and commuting rewrites |
@@ -22,6 +22,38 @@ attribute distinguishing contracts. This is an incremental starting point;
 four nominal dialects with identical semantics would add complexity without
 providing the promised layer boundaries. Split representations as their
 operation sets and invariants actually diverge.
+
+## Backend compilation boundary
+
+M1 accepts a Qiskit `QuantumCircuit` that the caller has already compiled for
+a specific backend, together with the exact backend identity, its target, and
+a QRisk catalog. It returns a Qiskit circuit with equivalent ideal behavior
+and fewer matched occurrences where a supported rewrite is available, plus a
+structured report. The first input subset is static, parameter-bound circuits
+after gate optimization and before timing scheduling. The detailed task list
+and acceptance criteria are in [roadmap.md](roadmap.md).
+
+The planned adapter imports this circuit directly into physically mapped
+`mlirq.stage = "architecture"` IR, invokes the QRisk passes, and exports the
+result. This path does not invoke logical optimization, identity mapping,
+routing, gate lowering, or Qiskit's transpiler. The custom router remains
+removed. The four-layer proposal above is the longer-term design; M1 reuses
+the current physical IR without requiring new L2/L3 dialects first.
+
+Conversion must preserve physical indices, circuit width and idle/auxiliary
+wires, Qiskit's existing layout metadata, classical registers and measurement
+destinations, global phase, and barriers. Existing layout permutations are
+provenance to preserve, not instructions to remap the compiled circuit again.
+Gate instruction legality must be checked against the supplied Qiskit target
+before and after optimization, separately from the current topology verifier.
+Unsupported operations or timing semantics must be rejected explicitly.
+
+The native matcher and commuting rewrites are implemented; Qiskit circuit
+conversion and end-to-end validation are not. Native IR annotations already
+act as rewrite barriers, but Qiskit barrier conversion still needs implementation.
+Any later gate rewrite requires another pattern scan on the final sequence.
+MLIRQ owns the pattern transformations and verification at this boundary;
+hardware execution and measured fidelity evaluation are later work.
 
 ## Quantum-state ownership
 
@@ -80,10 +112,12 @@ symmetric. These are topology checks; accepting `sx` or `cz` does not assert
 that every named backend natively supports the dialect's full gate set.
 
 Identity placement assigns indices 0, 1, ... in allocation order separately
-for each circuit. It checks capacity and every CX before applying any
+for each circuit. It checks capacity and every CX/CZ before applying any
 placement to the module. Successfully mapped circuits receive
 `mlirq.stage = "architecture"`, and each allocation receives `physical`.
 Architecture-stage IR always revalidates target legality on parsing.
+This utility cannot repair non-neighbor interactions; it remains useful for
+small examples and tests. M1 imports existing placement and does not run it.
 
 Physical qubit reuse is deliberately unsupported, even after discard or
 measurement. This avoids silently assuming reset, isolation, or an ancilla
@@ -131,3 +165,4 @@ scoped, ordered gate trace rather than a noise model or scheduler. See
 - [MLIR operation definition specification](https://mlir.llvm.org/docs/DefiningDialects/Operations/)
 - [MLIR pass infrastructure](https://mlir.llvm.org/docs/PassManagement/)
 - [LLVM standalone example](https://github.com/llvm/llvm-project/tree/llvmorg-18.1.3/mlir/examples/standalone)
+- [Qiskit transpiler stages](https://quantum.cloud.ibm.com/docs/en/guides/transpiler-stages)
