@@ -14,7 +14,7 @@ import struct
 
 import qiskit
 from qiskit import QuantumCircuit
-from qiskit.circuit import Measure
+from qiskit.circuit import Barrier, Measure
 from qiskit.circuit.library import CXGate, CZGate, HGate, RZGate, SXGate, XGate, ZGate
 from qiskit.transpiler import Target
 
@@ -25,6 +25,7 @@ _Q = "!mlirq.qubit"
 _PROTOTYPES = {
     "h": HGate(), "x": XGate(), "z": ZGate(), "sx": SXGate(),
     "rz": RZGate(0.0), "cx": CXGate(), "cz": CZGate(), "measure": Measure(),
+    "barrier": Barrier(0),
 }
 # Qiskit uses singleton subclasses for many standard instructions. Mutable
 # instances use their public base class. Do not trust arbitrary gates by name.
@@ -96,9 +97,9 @@ def import_compiled_circuit(
 
     Positions in circuit.qubits are physical indices. All wires are retained,
     including idle/auxiliary wires. Supported operations are h/x/z/sx/rz/cx/cz
-    and one terminal measurement per wire. Barriers and instruction annotations
-    are rejected until T3 implements their conversion. No native executable is
-    required until NativeCompiler.run() is called.
+    and one terminal measurement per wire, plus barriers (including after
+    measurements). Instruction labels are preserved. Import itself requires
+    no native executable; native processing and export require mlirq-opt.
     """
     if not isinstance(circuit, QuantumCircuit):
         raise InputError("invalid_circuit", "circuit must be a Qiskit QuantumCircuit")
@@ -136,7 +137,6 @@ def import_compiled_circuit(
     measurements = []
     outputs = []
     retired = set()
-    written_bits = set()
     edges = set()
     for index, instruction in enumerate(source.data):
         operation = instruction.operation
@@ -148,17 +148,26 @@ def import_compiled_circuit(
                 f"Instruction {index} ({name}) is not a supported standard instruction",
                 **context,
             )
-        if operation.label is not None or getattr(operation, "condition", None) is not None:
-            raise InputError("unsupported_annotation", "Instruction labels/conditions require later support", **context)
+        if getattr(operation, "condition", None) is not None:
+            raise InputError("unsupported_annotation", "Conditional instructions are unsupported", **context)
         qubits = tuple(source.find_bit(bit).index for bit in instruction.qubits)
         clbits = tuple(source.find_bit(bit).index for bit in instruction.clbits)
-        arity = 2 if name in {"cx", "cz"} else 1
+        arity = len(qubits) if name == "barrier" else (2 if name in {"cx", "cz"} else 1)
         if (
             len(qubits) != arity or len(set(qubits)) != arity
             or len(clbits) != (1 if name == "measure" else 0)
             or len(operation.params) != (1 if name == "rz" else 0)
         ):
             raise InputError("invalid_instruction", "Invalid operand/parameter arity", **context)
+        source_attr = f"mlirq.qiskit.source_index = {index} : i64"
+        if name == "barrier":
+            # Directives need no Target gate entry and do not revive a retired
+            # quantum wire. Retain their ordered scope, including an empty one.
+            scope = "array<i64: " + ", ".join(map(str, qubits)) + ">" if qubits else "array<i64>"
+            operations.append(
+                f'    "mlirq.barrier"() {{qubits = {scope}, {source_attr}}} : () -> ()'
+            )
+            continue
         if retired.intersection(qubits):
             raise InputError("use_after_measurement", "A measured physical wire cannot be used again", **context)
         params = tuple(_number(p, **context) for p in operation.params)
@@ -181,21 +190,18 @@ def import_compiled_circuit(
 
         inputs = ", ".join(wires[q] for q in qubits)
         if name == "measure":
-            if clbits[0] in written_bits:
-                raise InputError("classical_overwrite", "Repeated writes to a classical bit require later support", **context)
             result = f"%m{index}"
             operations.append(
                 f'    {result} = "mlirq.measure"({inputs}) '
-                f'{{mlirq.qiskit.clbit = {clbits[0]} : i64}} : ({_Q}) -> i1'
+                f'{{mlirq.qiskit.clbit = {clbits[0]} : i64, {source_attr}}} : ({_Q}) -> i1'
             )
             measurements.append((index, qubits[0], clbits[0]))
             outputs.append(result)
             retired.add(qubits[0])
-            written_bits.add(clbits[0])
         else:
             results = [f"%s{index}_{slot}" for slot in range(arity)]
             types = ", ".join([_Q] * arity)
-            attrs = f" {{angle = {_f64(params[0])}}}" if name == "rz" else ""
+            attrs = f" {{{source_attr}" + (f", angle = {_f64(params[0])}" if name == "rz" else "") + "}"
             operations.append(
                 f'    {", ".join(results)} = "mlirq.{name}"({inputs}){attrs} '
                 f': ({types}) -> ({types})'
@@ -215,7 +221,7 @@ def import_compiled_circuit(
         '    mlirq.stage = "architecture",',
         f'    mlirq.target = {{name = "{backend_name}", num_qubits = {capacity} : i64, '
         f"coupling = {coupling}, directed = true}},",
-        "    mlirq.qiskit.import_version = 1 : i64,",
+        "    mlirq.qiskit.import_version = 2 : i64,",
         f"    mlirq.qiskit.num_qubits = {source.num_qubits} : i64,",
         f"    mlirq.qiskit.num_clbits = {source.num_clbits} : i64,",
         f"    mlirq.qiskit.global_phase = {_f64(phase)}",

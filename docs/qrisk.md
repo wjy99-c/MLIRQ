@@ -30,9 +30,9 @@ The current pass requires already physically mapped IR whose gate
 representation matches the catalog. M1 will accept a Qiskit circuit that the
 caller has already compiled for its backend, import that existing physical
 placement, run these passes, and return a Qiskit circuit plus a report.
-The T1/T2 circuit importer and native bridge are implemented; they currently
-return MLIR with preserved input context. Qiskit circuit export and the complete
-optimization API are still TODO. See [qiskit-adapter.md](qiskit-adapter.md) for
+The T1–T4 import/export bridge is implemented, preserving input context,
+barriers, and optimized gate order. Output instruction validation and the
+complete optimization/report API remain TODO. See [qiskit-adapter.md](qiskit-adapter.md) for
 usage and [roadmap.md](roadmap.md) for checked implementation status.
 
 For M1, Qiskit performs layout, routing, translation, and optimization before
@@ -143,8 +143,10 @@ commutation is known to be exact, including global phase. The whitelist is:
 - Disjoint gates may be crossed while implementing a shared-wire rewrite.
 
 H/Z on the same wire, X on a CX control, SX/CZ on a shared wire, and other
-unproven cases remain unchanged. Allocations, measurement, discard, and
-opaque gate annotations are barriers, including on spectator wires.
+unproven cases remain unchanged. Allocations, measurement, discard, explicit
+barriers, and opaque gate annotations are rewrite fences, including on
+spectator wires. A validated Qiskit source instruction ID is provenance only;
+it follows its gate through reordering and does not prevent a rewrite.
 
 Every candidate is rescanned against **all active backend patterns**. It is
 accepted only if the total occurrence count strictly decreases and no active

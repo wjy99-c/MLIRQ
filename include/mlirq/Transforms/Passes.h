@@ -9,6 +9,7 @@ std::unique_ptr<mlir::Pass> createVerifyTargetPass();
 std::unique_ptr<mlir::Pass> createQRiskScanPass();
 std::unique_ptr<mlir::Pass> createQRiskMitigatePass();
 void registerQRiskPasses();
+void registerQiskitExportPass();
 void registerMLIRQPasses();
 }
 #endif

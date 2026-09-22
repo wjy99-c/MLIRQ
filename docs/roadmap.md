@@ -6,9 +6,9 @@
 backend-specific QRisk patterns through equivalent transformations, and return
 the optimized circuit in Qiskit form with an auditable report.
 
-**Status: partially implemented.** The native pattern engine and T1/T2 Python
-bridge/importer are implemented. Qiskit circuit export and the complete
-optimization API remain TODO. Status was updated on 2026-09-21.
+**Status: partially implemented.** The native pattern engine and T1–T4 Python
+bridge/import/export are implemented. Output instruction validation and the
+complete optimization/report API remain TODO. Status was updated on 2026-09-22.
 Checked boxes below refer to code and tests already present. Unchecked boxes
 are implementation TODOs.
 This milestone supersedes the earlier routing/adapter roadmap.
@@ -39,11 +39,11 @@ operations, timing-scheduled circuits/delays, custom pulse semantics, and other
 unsupported instructions must fail clearly. Additional native gates can be
 added with explicit semantics and tests as needed.
 
-The current T1/T2 importer accepts the standard gates and terminal measurements
-above. It retains all input wires and snapshots the Qiskit context. Barriers,
-instruction labels, and repeated classical-bit writes remain explicitly
-unsupported until their conversion is implemented. The current result is a
-native MLIR/context bundle; see [qiskit-adapter.md](qiskit-adapter.md).
+The adapter accepts the standard gates, terminal measurements, and barriers
+above, including instruction labels and repeated classical-bit writes in their
+original order. It retains all input wires and snapshots the Qiskit context.
+Import, native processing, and export are available as separate calls; see
+[qiskit-adapter.md](qiskit-adapter.md).
 
 An accepted rewrite must strictly reduce the total matched count without
 increasing any active pattern count. If no supported equivalent rewrite helps,
@@ -98,18 +98,24 @@ reduction is valid; universal elimination is not an acceptance requirement.
   physical positions; existing Qiskit layouts are never reapplied.
   Evidence: [importer](../python/mlirq_qiskit/importer.py) and
   [adapter tests](../test/python/test_adapter.py).
-- [ ] **T3 — Metadata and barrier preservation.** Carry Qiskit's layout
-  metadata, global phase, classical registers, bit order, and measurement
-  destinations through the conversion. Preserve barriers as rewrite fences.
-  Define how IR allocation/discard bookkeeping maps back without inserting
-  hardware initialization, reset, or discard instructions. Reject unsupported
-  operations and timing semantics explicitly.
-  Import snapshots, phase records, and classical destination attributes now
-  exist; barrier conversion and preservation through export remain TODO.
-- [ ] **T4 — Qiskit circuit export.** Reconstruct a new Qiskit circuit with
-  the optimized order, unchanged physical operands/parameters, and preserved
-  metadata. Support unitary circuits and partially/fully measured circuits.
-  Do not transpile the result again.
+- [x] **T3 — Metadata and barrier preservation.** Preserve layout, global
+  phase, register membership, bit order, measurement destinations, and labels.
+  Native barriers retain ordered physical scopes, including measured wires,
+  and conservatively fence all commuting reorders. Allocation/discard mark
+  conversion boundaries; export emits no initialization, reset, or discard.
+  Unsupported operations and timing semantics fail explicitly.
+  Evidence: [barrier definition](../include/mlirq/IR/MLIRQOps.td),
+  [importer](../python/mlirq_qiskit/importer.py), and
+  [round-trip tests](../test/python/test_export.py).
+- [x] **T4 — Qiskit circuit export.** `export_qiskit_circuit()` reconstructs
+  a new circuit in native order without transpiling. A native JSON pass
+  resolves verified SSA operands to physical indices; the exporter checks
+  instruction identities, exact parameter bits, metadata, and fences against
+  the source snapshot. Unitary, partially measured, and fully measured
+  circuits round-trip, including repeated classical-bit writes.
+  Evidence: [native export](../lib/Transforms/QiskitExport.cpp),
+  [Qiskit export](../python/mlirq_qiskit/exporter.py), and
+  [round-trip tests](../test/python/test_export.py).
 - [ ] **T5 — Input/output instruction validation.** Check each instruction's
   operation, ordered physical operands, and parameter values against the
   supplied target before import and after export. Keep this distinct from
@@ -126,15 +132,18 @@ reduction is valid; universal elimination is not an acceptance requirement.
   illegal target instructions, and unchanged inputs. Compare complex amplitudes
   on small unitary cases and ideal measured distributions with exact bit
   mappings. Check final pattern counts independently in test fixtures.
-  T1/T2 importer/bridge tests are present; complete round-trip tests await T4.
+  T1–T4 tests now cover round trips, phase-sensitive operators, exact measured
+  distributions, barriers, layouts, metadata isolation, and exported Fez
+  mitigation/rescanning. Complete optimization/report API coverage awaits T6.
 - [ ] **T8 — Reproducible example and CI.** Add a Python example in which the
   caller compiles with Qiskit, passes the result into MLIRQ, and receives an
   equivalent target-legal circuit with fewer occurrences. Use deterministic
   offline targets and toy catalogs for the guaranteed-reduction integration
   test; retain the historical QRisk examples separately. Document installation,
   supported inputs, API usage, and error behavior; run adapter tests in CI.
-  An import-only example and adapter CI now exist. This task still requires
-  the complete Qiskit-to-Qiskit optimization example.
+  A conversion round-trip example and adapter CI now exist. This task still
+  requires the complete optimization/report example with a deterministic
+  post-compilation reduction fixture.
 
 T1–T4 establish the conversion round trip. T5–T6 make it a validated optimization
 API. T7–T8 provide the evidence and usable example needed to complete M1.

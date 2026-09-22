@@ -67,6 +67,12 @@ LogicalResult mlirq::verifyMappedCircuit(
       placement[alloc->getResult(0)] = physical;
       continue;
     }
+    if (auto barrier = dyn_cast<BarrierOp>(op)) {
+      for (int64_t qubit : barrier.getQubits())
+        if (!allocated.contains(qubit))
+          return barrier.emitOpError("barrier qubit has no preceding physical allocation");
+      continue;
+    }
     llvm::SmallVector<int64_t> inputs;
     for (Value operand : op.getOperands()) {
       if (!isa<QubitType>(operand.getType()))

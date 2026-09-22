@@ -21,16 +21,17 @@ MLIRQ does not rerun those stages in this workflow.
 
 **Current status: M1 is partially implemented.** The native C++/TableGen MLIR
 core already scans and mitigates patterns in physically mapped textual MLIR.
-The Python/native bridge and Qiskit circuit importer (T1/T2) are implemented.
-Qiskit circuit export and the complete optimization API remain TODO.
+The Python/native bridge and Qiskit import/export round trip (T1–T4) are
+implemented, including metadata and barrier preservation. The complete
+optimization/report API and output instruction validation remain TODO.
 
 ## Implemented
 
 - `!mlirq.qubit` represents a live quantum-state wire. Every value has exactly
   one consuming use; unused wires must be explicitly discarded.
 - `mlirq.circuit` contains a closed, single-block circuit. Supported operations
-  are `alloc`, `h`, `x`, `z`, `sx`, `rz`, `cx`, `cz`, terminal `measure`, `discard`, and
-  `output`.
+  are `alloc`, `h`, `x`, `z`, `sx`, `rz`, `cx`, `cz`, terminal `measure`, architecture
+  `barrier`, `discard`, and `output`.
 - `--mlirq-logical-opt` removes adjacent H/H, X/X, Z/Z, and CX/CX inverse
   pairs. It preserves opaque operation annotations by leaving annotated pairs
   unchanged.
@@ -47,6 +48,9 @@ Qiskit circuit export and the complete optimization API remain TODO.
 - `tools/import_qrisk.py` imports QRisk DDMin reports or pattern memories. The
   supplied catalog contains three historical observations from the actual
   upstream repository, with source revisions, timestamps, and file hashes.
+- `export_qiskit_circuit()` reconstructs a new Qiskit circuit from native output,
+  preserving layout, phase, registers, measurement destinations, labels, and
+  barriers. `--mlirq-export-qiskit` supplies verified structured interchange.
 - CTest regression tests invoke the native compiler. A Python standard-library
   oracle compares complex amplitudes for optimized random circuits on every
   three-qubit basis input.
@@ -121,9 +125,11 @@ remain only in the regression fixtures.
 - [x] Apply equivalent commuting rewrites and report reduced/unresolved occurrences.
 - [x] Verify the native IR with toy and imported-pattern regression tests.
 - [x] Accept a compiled Qiskit circuit and its backend/target without remapping it.
-- [ ] Preserve circuit width, layouts, phase, classical-bit mapping, and barriers during conversion.
+- [x] Preserve circuit width, layouts, phase, classical-bit mapping, and barriers during conversion.
+- [x] Export the optimized native order as a new Qiskit circuit without recompiling.
 - [ ] Return an optimized Qiskit circuit and a structured report; validate native instructions before and after.
-- [ ] Add Qiskit round-trip/equivalence tests, an end-to-end example, and CI coverage.
+- [x] Run Qiskit round-trip/equivalence tests in CI.
+- [ ] Complete integration coverage and the full optimization/report example.
 
 Checked items describe the existing components; the complete Qiskit-to-Qiskit
 workflow is still in progress. The ordered task list, supported input scope, and
@@ -138,10 +144,10 @@ are foundation utilities, outside the M1 post-compilation path. See
 
 Local build and test evidence is recorded in [docs/validation.md](docs/validation.md).
 
-## Python importer and native bridge (T1/T2)
+## Python circuit conversion and native bridge (T1–T4)
 
 After building the native compiler, install the Python package and run the
-offline import example:
+offline round-trip example:
 
 ```sh
 python3 -m venv .venv
@@ -153,6 +159,7 @@ python3 -m venv .venv
 backend name, target, and pattern catalog. It preserves physical indices and
 the full circuit width in native IR, with isolated snapshots of the input
 context. `NativeCompiler.run()` verifies, scans, or mitigates that IR and
-returns a native result. Qiskit export follows in T4. See
+returns a native result. `export_qiskit_circuit(result, compiler=compiler)`
+exports that result as a new Qiskit circuit. See
 [docs/qiskit-adapter.md](docs/qiskit-adapter.md) for the API, supported input
 subset, errors, and tests.

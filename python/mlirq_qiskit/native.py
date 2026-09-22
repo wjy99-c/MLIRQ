@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+import json
 import math
 import os
 from pathlib import Path
@@ -65,6 +66,12 @@ class NativeCompiler:
         fixed relative filename so paths with spaces cannot alter pass options.
         This is a native bridge, not the later Qiskit-to-Qiskit optimizer API.
         """
+        return self._invoke(module, mode=mode)[0]
+
+    def _export(self, module: ImportedCircuit) -> dict:
+        return self._invoke(module, mode="verify", export=True)[1]
+
+    def _invoke(self, module, *, mode, export=False):
         if not isinstance(module, ImportedCircuit):
             raise InputError("invalid_module", "module must be returned by import_compiled_circuit")
         if not isinstance(mode, str) or mode not in {"verify", "scan", "mitigate"}:
@@ -73,6 +80,9 @@ class NativeCompiler:
         if mode != "verify":
             args.append(f"--mlirq-qrisk-{mode}=patterns-file=patterns.json")
         args.append("--mlirq-verify-target")
+        if export:
+            args.append("--mlirq-export-qiskit=output-file=circuit.json")
+        payload = None
         try:
             with tempfile.TemporaryDirectory(prefix="mlirq-") as work:
                 Path(work, "patterns.json").write_text(module.catalog_json, encoding="utf-8")
@@ -81,6 +91,21 @@ class NativeCompiler:
                     capture_output=True, cwd=work, timeout=self.timeout,
                     check=False,
                 )
+                if result.returncode:
+                    raise NativeCompilerError(
+                        "native_failure", "mlirq-opt rejected the module or pass inputs",
+                        returncode=result.returncode, diagnostics=result.stderr,
+                    )
+                if not result.stdout.strip():
+                    raise NativeCompilerError("native_empty_output", "mlirq-opt returned no module")
+                if export:
+                    try:
+                        payload = json.loads(Path(work, "circuit.json").read_text(encoding="utf-8"))
+                    except (OSError, UnicodeError, ValueError) as exc:
+                        raise NativeCompilerError(
+                            "native_invalid_export", "mlirq-opt did not produce valid Qiskit interchange JSON",
+                            diagnostics=result.stderr,
+                        ) from exc
         except subprocess.TimeoutExpired as exc:
             raise NativeCompilerError(
                 "native_timeout", f"mlirq-opt exceeded {self.timeout:g} seconds",
@@ -88,14 +113,7 @@ class NativeCompiler:
             ) from exc
         except (OSError, UnicodeError) as exc:
             raise NativeCompilerError("native_io_error", f"Cannot run mlirq-opt: {exc}") from exc
-        if result.returncode:
-            raise NativeCompilerError(
-                "native_failure", "mlirq-opt rejected the module or pass inputs",
-                returncode=result.returncode, diagnostics=result.stderr,
-            )
-        if not result.stdout.strip():
-            raise NativeCompilerError("native_empty_output", "mlirq-opt returned no module")
         return NativeResult(
             module=replace(module, mlir=result.stdout),
             mode=mode, diagnostics=result.stderr,
-        )
+        ), payload

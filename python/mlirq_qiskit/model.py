@@ -12,7 +12,7 @@ from qiskit.transpiler import Target
 
 @dataclass(frozen=True)
 class ImportedCircuit:
-    """Native MLIR plus the Qiskit context needed by a future exporter.
+    """Native MLIR plus the Qiskit context required for export.
 
     MLIR is not the complete Qiskit interchange by itself: the source snapshot
     retains register/layout metadata and the circuit's global phase. Accessors
@@ -31,7 +31,7 @@ class ImportedCircuit:
     qiskit_version: str
     _source: QuantumCircuit = field(repr=False, compare=False)
     _target: Target = field(repr=False, compare=False)
-    schema_version: int = field(default=1, init=False)
+    schema_version: int = field(default=2, init=False)
 
     @property
     def physical_qubits(self) -> tuple[int, ...]:
@@ -52,7 +52,7 @@ class ImportedCircuit:
 
 @dataclass(frozen=True)
 class NativeResult:
-    """Verified native output; Qiskit export and a Python report are later tasks."""
+    """Verified native output with export context; a Python report is a later task."""
 
     module: ImportedCircuit
     mode: str

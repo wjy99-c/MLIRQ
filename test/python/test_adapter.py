@@ -235,8 +235,8 @@ class ImporterTests(unittest.TestCase):
         self.assertEqual(error.as_dict()["instruction_index"], 0)
         self.assertEqual(error.as_dict()["operation"], "x")
 
-    def test_rejects_barriers_reset_delay_and_instruction_labels(self):
-        for kind in ["barrier", "reset", "delay"]:
+    def test_rejects_reset_and_delay(self):
+        for kind in ["reset", "delay"]:
             circuit = QuantumCircuit(1)
             if kind == "delay":
                 circuit.delay(5, 0, unit="dt")
@@ -244,9 +244,6 @@ class ImporterTests(unittest.TestCase):
                 getattr(circuit, kind)(0)
             with self.subTest(kind=kind):
                 self.assert_input_error(circuit, "unsupported_operation")
-        circuit = QuantumCircuit(1)
-        circuit.append(XGate(label="keep-me"), [0])
-        self.assert_input_error(circuit, "unsupported_annotation")
 
     def test_rejects_timing_scheduled_circuit_even_without_delays(self):
         circuit = QuantumCircuit(1)
@@ -261,15 +258,11 @@ class ImporterTests(unittest.TestCase):
             circuit.x(0)
         self.assert_input_error(circuit, "unsupported_operation")
 
-    def test_rejects_quantum_reuse_and_classical_overwrite(self):
+    def test_rejects_quantum_reuse(self):
         circuit = QuantumCircuit(2, 1)
         circuit.measure(0, 0)
         circuit.x(0)
         self.assert_input_error(circuit, "use_after_measurement")
-        circuit = QuantumCircuit(2, 1)
-        circuit.measure(0, 0)
-        circuit.measure(1, 0)
-        self.assert_input_error(circuit, "classical_overwrite")
 
     def test_rejects_invalid_backend_capacity_and_target_instruction(self):
         circuit = QuantumCircuit(2)

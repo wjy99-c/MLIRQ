@@ -23,7 +23,7 @@ LogicalResult CircuitOp::verifyRegions() {
 
   llvm::DenseSet<int64_t> physicalIds;
   for (Operation &op : block) {
-    if (!isa<AllocOp, HOp, XOp, ZOp, SXOp, RzOp, CXOp, CZOp, MeasureOp, DiscardOp, OutputOp>(op))
+    if (!isa<AllocOp, HOp, XOp, ZOp, SXOp, RzOp, CXOp, CZOp, MeasureOp, BarrierOp, DiscardOp, OutputOp>(op))
       return op.emitOpError("is not supported in a straight-line MLIRQ circuit");
     for (Value result : op.getResults()) {
       if (!isa<QubitType>(result.getType()))
@@ -66,6 +66,18 @@ LogicalResult AllocOp::verify() {
 LogicalResult RzOp::verify() {
   if (!std::isfinite(getAngle().convertToDouble()))
     return emitOpError("angle must be finite, in radians");
+  return success();
+}
+
+LogicalResult BarrierOp::verify() {
+  auto circuit = (*this)->getParentOfType<CircuitOp>();
+  auto stage = circuit->getAttrOfType<StringAttr>("mlirq.stage");
+  if (!stage || stage.getValue() != "architecture")
+    return emitOpError("physical barriers require the architecture stage");
+  llvm::DenseSet<int64_t> seen;
+  for (int64_t qubit : getQubits())
+    if (qubit < 0 || !seen.insert(qubit).second)
+      return emitOpError("barrier qubits must be distinct nonnegative physical indices");
   return success();
 }
 
