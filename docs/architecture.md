@@ -33,9 +33,9 @@ structured report. The first input subset is static, parameter-bound circuits
 after gate optimization and before timing scheduling. The detailed task list
 and acceptance criteria are in [roadmap.md](roadmap.md).
 
-The planned adapter imports this circuit directly into physically mapped
-`mlirq.stage = "architecture"` IR, invokes the QRisk passes, and exports the
-result. This path does not invoke logical optimization, identity mapping,
+The T1/T2 adapter imports this circuit directly into physically mapped
+`mlirq.stage = "architecture"` IR and can invoke the native QRisk passes.
+Qiskit export follows in T4. This path does not invoke logical optimization, identity mapping,
 routing, gate lowering, or Qiskit's transpiler. The custom router remains
 removed. The four-layer proposal above is the longer-term design; M1 reuses
 the current physical IR without requiring new L2/L3 dialects first.
@@ -48,9 +48,13 @@ Gate instruction legality must be checked against the supplied Qiskit target
 before and after optimization, separately from the current topology verifier.
 Unsupported operations or timing semantics must be rejected explicitly.
 
-The native matcher and commuting rewrites are implemented; Qiskit circuit
-conversion and end-to-end validation are not. Native IR annotations already
-act as rewrite barriers, but Qiskit barrier conversion still needs implementation.
+The native matcher, commuting rewrites, and Qiskit import/native bridge are
+implemented. The importer retains independent input/target snapshots, full
+circuit width, physical indices, phase records, and measurement destinations.
+Qiskit export and end-to-end validation remain TODO. Native IR annotations
+already act as rewrite barriers, but Qiskit barriers are explicitly rejected
+until T3 implements their conversion. The bundle contract is in
+[qiskit-adapter.md](qiskit-adapter.md).
 Any later gate rewrite requires another pattern scan on the final sequence.
 MLIRQ owns the pattern transformations and verification at this boundary;
 hardware execution and measured fidelity evaluation are later work.

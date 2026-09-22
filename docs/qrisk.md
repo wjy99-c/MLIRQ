@@ -30,8 +30,10 @@ The current pass requires already physically mapped IR whose gate
 representation matches the catalog. M1 will accept a Qiskit circuit that the
 caller has already compiled for its backend, import that existing physical
 placement, run these passes, and return a Qiskit circuit plus a report.
-The circuit importer/exporter and end-to-end API are not yet implemented.
-See [roadmap.md](roadmap.md) for checked implementation status and TODOs.
+The T1/T2 circuit importer and native bridge are implemented; they currently
+return MLIR with preserved input context. Qiskit circuit export and the complete
+optimization API are still TODO. See [qiskit-adapter.md](qiskit-adapter.md) for
+usage and [roadmap.md](roadmap.md) for checked implementation status.
 
 For M1, Qiskit performs layout, routing, translation, and optimization before
 MLIRQ receives the circuit. The initial subset excludes timing-scheduled

@@ -1,5 +1,32 @@
 # Validation
 
+## Qiskit importer and native bridge (2026-09-21)
+
+The T1/T2 adapter adds **23 tests**, all passing with Qiskit **2.4.2** and
+**2.5.2** on Python 3.12.14. Both environments installed the built Python wheel;
+the tests invoked the native LLVM/MLIR 18.1.3 compiler. The existing 47 native
+and importer regressions also passed, giving 70 distinct regression tests.
+
+The new coverage includes an actually transpiled circuit with initial layout
+`[4, 1]`, exact physical gate operands after routing, full/idle/auxiliary wire
+width, all supported gate semantics, phase-sensitive numerical comparisons,
+binary64 edge cases, terminal measurement destinations, isolated context/catalog
+snapshots, unsupported inputs, backend-specific scan/mitigate behavior, and
+structured native errors/timeouts. The historical Fez sequence runs through
+the bridge with two occurrences before and zero after mitigation.
+
+The offline import example passed in both environments. Wheel contents were
+checked to contain only the Python adapter and distribution metadata. A
+separate setuptools build directory prevents CMake artifacts from entering
+the portable wheel. CI repeats wheel validation, installation, and adapter
+tests for both Qiskit versions, alongside the native CTest suites.
+
+These tests establish the importer/native bridge for its documented subset.
+They do not implement Qiskit export, barrier conversion, the complete M1 API,
+or a hardware-fidelity evaluation. See [qiskit-adapter.md](qiskit-adapter.md).
+
+## Native core (2026-09-18)
+
 Validated locally on 2026-09-18 using Ubuntu 24.04 (x86-64), GNU C++ 13.3.0,
 and LLVM/MLIR 18.1.3. TableGen generation, all C++ compilation units, and the
 `mlirq-opt` link completed successfully in Release mode.

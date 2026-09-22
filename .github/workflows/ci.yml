@@ -9,15 +9,29 @@ jobs:
   native:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        qiskit: ["2.4.2", "2.5.2"]
     steps:
       - uses: actions/checkout@v4
       - name: Install LLVM and MLIR 18
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build g++ libmlir-18-dev mlir-18-tools llvm-18-dev
+          sudo apt-get install -y cmake ninja-build g++ python3-venv libmlir-18-dev mlir-18-tools llvm-18-dev
       - name: Configure
         run: cmake -S . -B build -G Ninja -DMLIR_DIR=/usr/lib/llvm-18/lib/cmake/mlir -DLLVM_DIR=/usr/lib/llvm-18/lib/cmake/llvm -DCMAKE_BUILD_TYPE=Release
       - name: Build
         run: cmake --build build --parallel 2
       - name: Native regression and numerical equivalence
         run: ctest --test-dir build --output-on-failure
+      - name: Install Python adapter and Qiskit
+        run: |
+          python3 -m venv .venv
+          .venv/bin/python -m pip wheel --no-deps --wheel-dir dist .
+          .venv/bin/python test/check_wheel.py dist/mlirq_qiskit-*.whl
+          .venv/bin/python -m pip install dist/mlirq_qiskit-*.whl "qiskit==${{ matrix.qiskit }}"
+      - name: Compiled-circuit importer and native bridge
+        env:
+          MLIRQ_OPT: ${{ github.workspace }}/build/bin/mlirq-opt
+        run: .venv/bin/python -m unittest discover -s test/python -v
