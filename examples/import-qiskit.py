@@ -1,4 +1,4 @@
-"""Offline T1/T2 example: the caller transpiles; MLIRQ imports and verifies."""
+"""Offline T1–T4 example: the caller transpiles; MLIRQ imports and exports."""
 
 import argparse
 from pathlib import Path
@@ -7,8 +7,10 @@ from qiskit import QuantumCircuit, transpile
 from qiskit.circuit import Parameter
 from qiskit.circuit.library import CXGate, RZGate, SXGate, XGate
 from qiskit.transpiler import Target
+from qiskit.quantum_info import Operator
+import numpy as np
 
-from mlirq_qiskit import NativeCompiler, import_compiled_circuit
+from mlirq_qiskit import NativeCompiler, export_qiskit_circuit, import_compiled_circuit
 
 
 def main():
@@ -26,6 +28,9 @@ def main():
     logical.h(0)
     logical.cx(0, 1)
     logical.rz(0.319, 1)
+    logical.barrier(label="preserved-fence")
+    logical.global_phase = 0.217
+    logical.metadata = {"example": "Qiskit conversion round trip"}
 
     # This is the caller's compilation step. The adapter does not repeat it.
     compiled = transpile(
@@ -36,10 +41,17 @@ def main():
         compiled, backend_name="synthetic-line-6", target=target,
         patterns=Path(__file__).resolve().parents[1] / "patterns/qrisk-imported.json",
     )
-    # This example verifies import. The historical catalog has no patterns for
+    # This example verifies conversion. The historical catalog has no patterns for
     # this synthetic backend; the separate native QRisk examples show mitigation.
-    result = NativeCompiler(args.mlirq_opt).run(module)
-    print(result.mlir, end="")
+    compiler = NativeCompiler(args.mlirq_opt)
+    result = compiler.run(module)
+    exported = export_qiskit_circuit(result, compiler=compiler)
+    assert exported == compiled
+    assert exported.layout == compiled.layout
+    assert exported.metadata == compiled.metadata
+    np.testing.assert_allclose(Operator(exported).data, Operator(compiled).data, atol=1e-12, rtol=0)
+    print(exported)
+    print(f"Verified round trip: {exported.num_qubits} physical wires, phase={exported.global_phase}")
 
 
 if __name__ == "__main__":

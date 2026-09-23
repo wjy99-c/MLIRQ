@@ -43,3 +43,7 @@ class CatalogError(MLIRQError):
 
 class NativeCompilerError(MLIRQError):
     """The native executable is unavailable, timed out, or rejected the module."""
+
+
+class ExportError(MLIRQError):
+    """Native output cannot be reconciled with the imported Qiskit context."""

@@ -161,6 +161,8 @@ LogicalResult buildTrace(CircuitOp circuit, Trace &trace) {
         return op.emitOpError("QRisk requires physical allocations");
       event.qubits.push_back(physical.getInt());
       placement[op.getResult(0)] = physical.getInt();
+    } else if (auto barrier = dyn_cast<BarrierOp>(op)) {
+      event.qubits.assign(barrier.getQubits().begin(), barrier.getQubits().end());
     } else {
       for (Value operand : op.getOperands()) {
         if (!isa<QubitType>(operand.getType()))
@@ -182,9 +184,14 @@ LogicalResult buildTrace(CircuitOp circuit, Trace &trace) {
     if (auto rz = dyn_cast<RzOp>(op))
       event.angle = rz.getAngle().convertToDouble();
     event.movable = isGate(event.gate);
-    for (NamedAttribute attr : op.getAttrs())
-      if (!(isa<RzOp>(op) && attr.getName().getValue() == "angle"))
+    for (NamedAttribute attr : op.getAttrs()) {
+      StringRef key = attr.getName().getValue();
+      auto index = dyn_cast<IntegerAttr>(attr.getValue());
+      bool sourceIndex = key == "mlirq.qiskit.source_index" && index &&
+                         index.getType().isInteger(64) && index.getInt() >= 0;
+      if (!(isa<RzOp>(op) && key == "angle") && !sourceIndex)
         event.movable = false; // Timing, calibration, and opaque annotations are barriers.
+    }
     trace.push_back(std::move(event));
   }
   return success();

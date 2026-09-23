@@ -31,7 +31,9 @@ jobs:
           .venv/bin/python -m pip wheel --no-deps --wheel-dir dist .
           .venv/bin/python test/check_wheel.py dist/mlirq_qiskit-*.whl
           .venv/bin/python -m pip install dist/mlirq_qiskit-*.whl "qiskit==${{ matrix.qiskit }}"
-      - name: Compiled-circuit importer and native bridge
+      - name: Qiskit import, export, and native bridge
         env:
           MLIRQ_OPT: ${{ github.workspace }}/build/bin/mlirq-opt
-        run: .venv/bin/python -m unittest discover -s test/python -v
+        run: |
+          .venv/bin/python -m unittest discover -s test/python -v
+          .venv/bin/python examples/import-qiskit.py

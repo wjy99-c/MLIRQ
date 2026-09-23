@@ -11,6 +11,7 @@ def check_wheel(path):
     required = {
         "mlirq_qiskit/__init__.py",
         "mlirq_qiskit/importer.py",
+        "mlirq_qiskit/exporter.py",
         "mlirq_qiskit/native.py",
         "mlirq_qiskit/py.typed",
     }

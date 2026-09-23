@@ -1,5 +1,38 @@
 # Validation
 
+## Qiskit metadata, barriers, and export (2026-09-22)
+
+T3/T4 adds **22 tests** to the 23 adapter tests. All **45 adapter tests** pass
+with Qiskit **2.4.2** and **2.5.2** on Python 3.12.14, using the built Python
+wheel and the rebuilt LLVM/MLIR 18.1.3 native compiler. The **47 native/importer
+regressions** also pass, for **92 distinct tests**.
+
+Round-trip coverage checks every supported gate, complex operators including
+global phase, actual transpiler layout/routing metadata, sparse physical wires,
+idle/auxiliary wires, multiple/alias registers, loose bits and ancillas,
+instruction labels, and exact binary64 parameters. Exact branch simulation
+checks partially/fully measured distributions and repeated classical-bit
+writes, including unwritten bits. Barriers retain scope, order, and labels,
+including empty barriers and barriers after measurement; no rewrite crosses
+them. Snapshot and output mutations remain isolated.
+
+The native exporter rejects invalid barriers, incomplete wire bookkeeping,
+missing/duplicate instruction IDs, unknown semantic attributes, old bundle
+schemas, and incomplete measurement outputs. Python export rejects altered
+operations, physical operands, parameter bits, phase/backend context, lost
+instructions, and fence crossings. Malformed/missing JSON produces a structured
+error. Export reconstructs from parsed native operations, not assembly regexes.
+
+The historical Fez fixture goes from **2 occurrences to 0**, remains equivalent
+as a complete Qiskit operator, and still has zero matches after export,
+reimport, and native rescanning. The conversion example also passes on both
+Qiskit versions. CI installs and validates the wheel before running the suites.
+
+These results establish T1–T4 for the supported subset. The separate output
+instruction validation, complete optimization/report API, and remaining M1
+integration/demo tasks remain on the roadmap. They do not establish hardware
+fidelity improvements.
+
 ## Qiskit importer and native bridge (2026-09-21)
 
 The T1/T2 adapter adds **23 tests**, all passing with Qiskit **2.4.2** and
@@ -22,8 +55,9 @@ the portable wheel. CI repeats wheel validation, installation, and adapter
 tests for both Qiskit versions, alongside the native CTest suites.
 
 These tests establish the importer/native bridge for its documented subset.
-They do not implement Qiskit export, barrier conversion, the complete M1 API,
-or a hardware-fidelity evaluation. See [qiskit-adapter.md](qiskit-adapter.md).
+Export and barrier support were added in the T3/T4 work above. The complete M1
+API and hardware-fidelity evaluation remain later work.
+See [qiskit-adapter.md](qiskit-adapter.md).
 
 ## Native core (2026-09-18)
 

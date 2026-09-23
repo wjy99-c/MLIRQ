@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mlirq-qiskit"
-version = "0.1.0"
-description = "Import backend-compiled Qiskit circuits into the native MLIRQ compiler"
+version = "0.2.0"
+description = "Post-Qiskit circuit conversion and QRisk native compiler bridge"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = ["qiskit>=2.4.2,<2.6"]

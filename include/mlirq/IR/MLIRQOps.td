@@ -63,6 +63,14 @@ def MLIRQ_MeasureOp : MLIRQ_Op<"measure", [HasParent<"CircuitOp">]> {
   let results = (outs I1:$bit);
   let assemblyFormat = "$qubit attr-dict `:` type($qubit) `->` type($bit)";
 }
+def MLIRQ_BarrierOp : MLIRQ_Op<"barrier", [HasParent<"CircuitOp">]> {
+  let summary = "Architecture-stage rewrite fence over ordered physical wires";
+  // A directive does not consume quantum state. Physical indices also allow
+  // barriers after terminal measurements, when no live SSA wire remains.
+  let arguments = (ins DenseI64ArrayAttr:$qubits);
+  let assemblyFormat = "$qubits attr-dict";
+  let hasVerifier = 1;
+}
 def MLIRQ_DiscardOp : MLIRQ_Op<"discard", [HasParent<"CircuitOp">]> {
   let summary = "Explicitly trace out a quantum wire; does not assert |0>";
   let arguments = (ins MLIRQ_Qubit:$qubit);

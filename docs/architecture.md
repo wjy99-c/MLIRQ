@@ -33,9 +33,10 @@ structured report. The first input subset is static, parameter-bound circuits
 after gate optimization and before timing scheduling. The detailed task list
 and acceptance criteria are in [roadmap.md](roadmap.md).
 
-The T1/T2 adapter imports this circuit directly into physically mapped
+The T1–T4 adapter imports this circuit directly into physically mapped
 `mlirq.stage = "architecture"` IR and can invoke the native QRisk passes.
-Qiskit export follows in T4. This path does not invoke logical optimization, identity mapping,
+It exports native order back to Qiskit while retaining input metadata.
+This path does not invoke logical optimization, identity mapping,
 routing, gate lowering, or Qiskit's transpiler. The custom router remains
 removed. The four-layer proposal above is the longer-term design; M1 reuses
 the current physical IR without requiring new L2/L3 dialects first.
@@ -48,12 +49,13 @@ Gate instruction legality must be checked against the supplied Qiskit target
 before and after optimization, separately from the current topology verifier.
 Unsupported operations or timing semantics must be rejected explicitly.
 
-The native matcher, commuting rewrites, and Qiskit import/native bridge are
+The native matcher, commuting rewrites, and Qiskit import/export bridge are
 implemented. The importer retains independent input/target snapshots, full
 circuit width, physical indices, phase records, and measurement destinations.
-Qiskit export and end-to-end validation remain TODO. Native IR annotations
-already act as rewrite barriers, but Qiskit barriers are explicitly rejected
-until T3 implements their conversion. The bundle contract is in
+Full output target validation and the optimization/report API remain TODO.
+Opaque IR annotations act as rewrite fences. Qiskit barriers are physical
+directives and conservatively block all gate motion across them.
+The bundle and structured export contracts are in
 [qiskit-adapter.md](qiskit-adapter.md).
 Any later gate rewrite requires another pattern scan on the final sequence.
 MLIRQ owns the pattern transformations and verification at this boundary;
@@ -79,13 +81,22 @@ or explicit discard.
 | `cx` | Consume distinct control and target wires; results retain that wire order |
 | `cz` | Apply diag(1,1,1,-1) to distinct wires; results retain operand order |
 | `measure` | Z-basis measurement returning i1 and consuming the wire |
+| `barrier` | Architecture directive with distinct, ordered physical qubits; no state consumption; may reference measured wires |
 | `discard` | Trace out a wire; this is not an assertion that the state is zero |
 | `output` | Terminate the circuit, returning ordered classical bits |
 
 Measurement is terminal for its wire. Mid-circuit measurement with quantum
 continuation, feed-forward, reset/reuse, calls, block arguments, and control
 flow need explicit future semantics and are rejected by the current operation
-set or structural verifier.
+set or structural verifier. A barrier may name previously measured wires
+because it is a directive, not quantum continuation.
+
+For Qiskit conversion, leading allocations declare all existing input wires
+and trailing discards close unmeasured wires in the internal representation.
+Export validates those boundaries and omits this bookkeeping; it leaves
+unmeasured output wires available to the caller and inserts no hardware
+initialization, reset, or discard instruction. Export accepts only the current
+reorder-only contract and rejects missing wires or altered instructions.
 
 Quantum operations deliberately lack `Pure` and speculative-execution
 traits. Unknown effects conservatively prevent generic DCE/CSE from treating
@@ -136,6 +147,7 @@ lifetime policy that HALO has not yet supplied.
 | `mlirq-verify-target` | L1 circuit | Read-only legality check |
 | `mlirq-qrisk-scan` | L1 circuit and local pattern catalog | Report exact-backend, physical-wire occurrences; no gate changes |
 | `mlirq-qrisk-mitigate` | L1 circuit and local pattern catalog | Exact commuting reorders; lower total occurrences without increasing any active pattern; unresolved hits reported |
+| `mlirq-export-qiskit` | One verified architecture circuit with version 2 import metadata and source instruction IDs | Writes physical instructions and exact binary64 parameters to JSON; does not change IR |
 
 The inverse-pair rewrite checks result/operand order and unique use for both
 CX wires. It does not commute operations, fuse rotations, cross intervening
@@ -145,7 +157,10 @@ how calibration, provenance, and learned-pattern annotations are preserved.
 
 The QRisk pass runs on physically mapped IR, tracks physical wire identity
 through SSA, and rebuilds the quantum operands after a reorder. Allocations,
-measurements, discards, and opaque gate annotations are barriers. It verifies
+measurements, explicit barriers, discards, and opaque gate annotations are
+rewrite fences. The validated `mlirq.qiskit.source_index` attribute carries
+instruction identity only and does not prevent movement. Labels remain in
+the source snapshot and follow their instruction IDs through export. The pass verifies
 the transformed module before committing any changes. Its matcher is a
 scoped, ordered gate trace rather than a noise model or scheduler. See
 [qrisk.md](qrisk.md) for the schema, upstream differences, and exact identities.

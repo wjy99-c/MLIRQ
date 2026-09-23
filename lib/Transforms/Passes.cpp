@@ -106,6 +106,7 @@ std::unique_ptr<Pass> mlirq::createMapIdentityPass() { return std::make_unique<M
 std::unique_ptr<Pass> mlirq::createVerifyTargetPass() { return std::make_unique<VerifyTargetPass>(); }
 void mlirq::registerMLIRQPasses() {
   registerQRiskPasses();
+  registerQiskitExportPass();
   PassRegistration<LogicalOptPass>();
   PassRegistration<MapIdentityPass>();
   PassRegistration<VerifyTargetPass>();
