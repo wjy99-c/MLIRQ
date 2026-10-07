@@ -1,0 +1,66 @@
+{
+  "eligible_rows": 32,
+  "failures": 0,
+  "groups": [
+    {
+      "after_total": 10,
+      "attempted_rows": 12,
+      "before_total": 30,
+      "eligible_rows": 12,
+      "group": "constructed_fixture",
+      "initial_match_rows": 12,
+      "median_seconds": 6.167208541999798,
+      "method": "mlirq",
+      "outcomes": {
+        "blocked": 4,
+        "eliminated": 8
+      },
+      "p90_seconds": 6.5161360054001305,
+      "status_counts": {
+        "ok": 12
+      },
+      "unique_circuits": 6
+    },
+    {
+      "after_total": 0,
+      "attempted_rows": 20,
+      "before_total": 0,
+      "eligible_rows": 20,
+      "group": "generated_workload",
+      "initial_match_rows": 0,
+      "median_seconds": 6.327082978999897,
+      "method": "mlirq",
+      "outcomes": {
+        "no_matches": 20
+      },
+      "p90_seconds": 7.502380632500035,
+      "status_counts": {
+        "ok": 20
+      },
+      "unique_circuits": 10
+    }
+  ],
+  "interpretation": "Smoke/pilot evidence, not a completed paper evaluation. Fixtures and scaling copies are synthetic.",
+  "paired_tvd_improvement": {
+    "constructed_fixture": {
+      "ci95": [
+        -0.006347656249999996,
+        0.006917317708333336
+      ],
+      "mean": -0.0003255208333333313,
+      "n": 6
+    },
+    "generated_workload": {
+      "ci95": [
+        -0.004950851219680069,
+        0.005625151690960005
+      ],
+      "mean": 0.00043546755398256656,
+      "n": 10
+    }
+  },
+  "rows": 32,
+  "rq": "rq4",
+  "schema_version": 1,
+  "uncertainty_unit": "circuit mean across local simulator repeats; no calibration-window inference"
+}

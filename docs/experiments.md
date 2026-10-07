@@ -40,6 +40,12 @@ docker run --rm -v "$PWD/results:/work/results" mlirq-experiments \
 
 These commands run the small smoke configuration. Output directories must be
 new: existing experimental records are never overwritten.
+The checked pilot and pinned revisions are recorded in
+[experiments/pilots/2026-10-06](../experiments/pilots/2026-10-06/README.md).
+RQ3 deliberately includes a conflicting synthetic catalog: the pinned QRisk
+baseline times out on that case, which is recorded and produces a nonzero
+exit status. Inspect the summary to distinguish baseline timeouts from
+correctness failures.
 
 ```sh
 scripts/run-rq1.sh --output results/rq1

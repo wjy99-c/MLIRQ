@@ -1,0 +1,47 @@
+{
+  "eligible_rows": 16,
+  "failures": 0,
+  "groups": [
+    {
+      "after_total": 5,
+      "attempted_rows": 6,
+      "before_total": 15,
+      "eligible_rows": 6,
+      "group": "constructed_fixture",
+      "initial_match_rows": 6,
+      "median_seconds": 0.08491405849997591,
+      "method": "mlirq",
+      "outcomes": {
+        "blocked": 2,
+        "eliminated": 4
+      },
+      "p90_seconds": 0.1151120944999775,
+      "status_counts": {
+        "ok": 6
+      },
+      "unique_circuits": 6
+    },
+    {
+      "after_total": 0,
+      "attempted_rows": 10,
+      "before_total": 0,
+      "eligible_rows": 10,
+      "group": "generated_workload",
+      "initial_match_rows": 0,
+      "median_seconds": 0.08643580750003821,
+      "method": "mlirq",
+      "outcomes": {
+        "no_matches": 10
+      },
+      "p90_seconds": 0.1452843305999977,
+      "status_counts": {
+        "ok": 10
+      },
+      "unique_circuits": 10
+    }
+  ],
+  "interpretation": "Smoke/pilot evidence, not a completed paper evaluation. Fixtures and scaling copies are synthetic.",
+  "rows": 16,
+  "rq": "rq1",
+  "schema_version": 1
+}

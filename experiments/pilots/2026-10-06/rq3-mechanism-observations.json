@@ -1,0 +1,1784 @@
+[
+  {
+    "after": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "after_total": 2,
+    "before": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "before_total": 2,
+    "case": "stress-conflicting-patterns",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 150753280,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "mlirq",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 2,
+          "backend": "ibm_fez",
+          "before_total": 2,
+          "candidates": 2,
+          "legal_candidates": 2,
+          "options": {
+            "acceptance": "componentwise",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-a"
+            },
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-b"
+            },
+            {
+              "after": 0,
+              "before": 0,
+              "id": "reverse"
+            }
+          ],
+          "rewrites": 0,
+          "scan_seconds": 8.842e-06,
+          "scans": 3,
+          "search_seconds": 2.4265e-05,
+          "status": "blocked",
+          "termination_reason": "no_improving_move"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:acceptance-stress"
+    },
+    "outcome": "blocked",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 0.3138699770000244
+  },
+  {
+    "after": {
+      "forward-a": 0,
+      "forward-b": 0,
+      "reverse": 1
+    },
+    "after_total": 1,
+    "before": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "before_total": 2,
+    "case": "stress-conflicting-patterns",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 0,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "random",
+    "outcome": "partial",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 0.011918867000019873
+  },
+  {
+    "after": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "after_total": 2,
+    "before": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "before_total": 2,
+    "case": "stress-conflicting-patterns",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 0,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "qiskit",
+    "outcome": "blocked",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 7.633199999190765e-05
+  },
+  {
+    "after": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "after_total": 2,
+    "before": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "before_total": 2,
+    "case": "stress-conflicting-patterns",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 151478272,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "global",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 2,
+          "backend": "ibm_fez",
+          "before_total": 2,
+          "candidates": 2,
+          "legal_candidates": 2,
+          "options": {
+            "acceptance": "componentwise",
+            "matching": "global",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-a"
+            },
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-b"
+            },
+            {
+              "after": 0,
+              "before": 0,
+              "id": "reverse"
+            }
+          ],
+          "rewrites": 0,
+          "scan_seconds": 2.6919e-05,
+          "scans": 3,
+          "search_seconds": 3.6905e-05,
+          "status": "blocked",
+          "termination_reason": "no_improving_move"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:acceptance-stress"
+    },
+    "outcome": "blocked",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 0.2843923840000002
+  },
+  {
+    "after": {
+      "forward-a": 0,
+      "forward-b": 0,
+      "reverse": 1
+    },
+    "after_total": 1,
+    "before": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "before_total": 2,
+    "case": "stress-conflicting-patterns",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 150929408,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "total",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 1,
+          "backend": "ibm_fez",
+          "before_total": 2,
+          "candidates": 2,
+          "legal_candidates": 2,
+          "options": {
+            "acceptance": "total",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 0,
+              "before": 1,
+              "id": "forward-a"
+            },
+            {
+              "after": 0,
+              "before": 1,
+              "id": "forward-b"
+            },
+            {
+              "after": 1,
+              "before": 0,
+              "id": "reverse"
+            }
+          ],
+          "rewrites": 1,
+          "scan_seconds": 9.163999999999999e-06,
+          "scans": 3,
+          "search_seconds": 3.1747e-05,
+          "status": "partial",
+          "termination_reason": "no_improving_move"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:acceptance-stress"
+    },
+    "outcome": "partial",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 0.3022747949999598
+  },
+  {
+    "after": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "after_total": 2,
+    "before": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "before_total": 2,
+    "case": "stress-conflicting-patterns",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 151449600,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "diagonal",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 2,
+          "backend": "ibm_fez",
+          "before_total": 2,
+          "candidates": 2,
+          "legal_candidates": 2,
+          "options": {
+            "acceptance": "componentwise",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "diagonal"
+          },
+          "pattern_counts": [
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-a"
+            },
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-b"
+            },
+            {
+              "after": 0,
+              "before": 0,
+              "id": "reverse"
+            }
+          ],
+          "rewrites": 0,
+          "scan_seconds": 9.022000000000001e-06,
+          "scans": 3,
+          "search_seconds": 2.5588e-05,
+          "status": "blocked",
+          "termination_reason": "no_improving_move"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:acceptance-stress"
+    },
+    "outcome": "blocked",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 0.3350055839999868
+  },
+  {
+    "case": "stress-conflicting-patterns",
+    "group": "synthetic_ablation",
+    "method": "qrisk",
+    "reason": "worker_wall_time_limit",
+    "repeat": 0,
+    "status": "timeout"
+  },
+  {
+    "after": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "after_total": 2,
+    "before": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "before_total": 2,
+    "case": "stress-conflicting-patterns",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 151490560,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "local",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 2,
+          "backend": "ibm_fez",
+          "before_total": 2,
+          "candidates": 10000,
+          "legal_candidates": 10000,
+          "options": {
+            "acceptance": "local",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-a"
+            },
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-b"
+            },
+            {
+              "after": 0,
+              "before": 0,
+              "id": "reverse"
+            }
+          ],
+          "rewrites": 10000,
+          "scan_seconds": 0.025243159999999498,
+          "scans": 10001,
+          "search_seconds": 0.10960856,
+          "status": "unchanged",
+          "termination_reason": "budget"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:acceptance-stress"
+    },
+    "outcome": "blocked",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 0.39210008999998536
+  },
+  {
+    "after": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "after_total": 2,
+    "before": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "before_total": 2,
+    "case": "stress-conflicting-patterns",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 150548480,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "mlirq",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 2,
+          "backend": "ibm_fez",
+          "before_total": 2,
+          "candidates": 2,
+          "legal_candidates": 2,
+          "options": {
+            "acceptance": "componentwise",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-a"
+            },
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-b"
+            },
+            {
+              "after": 0,
+              "before": 0,
+              "id": "reverse"
+            }
+          ],
+          "rewrites": 0,
+          "scan_seconds": 8.924000000000001e-06,
+          "scans": 3,
+          "search_seconds": 2.5367e-05,
+          "status": "blocked",
+          "termination_reason": "no_improving_move"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:acceptance-stress"
+    },
+    "outcome": "blocked",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 0.2916138890000184
+  },
+  {
+    "after": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "after_total": 2,
+    "before": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "before_total": 2,
+    "case": "stress-conflicting-patterns",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 151670784,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "local",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 2,
+          "backend": "ibm_fez",
+          "before_total": 2,
+          "candidates": 10000,
+          "legal_candidates": 10000,
+          "options": {
+            "acceptance": "local",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-a"
+            },
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-b"
+            },
+            {
+              "after": 0,
+              "before": 0,
+              "id": "reverse"
+            }
+          ],
+          "rewrites": 10000,
+          "scan_seconds": 0.026346471999999593,
+          "scans": 10001,
+          "search_seconds": 0.106693759,
+          "status": "unchanged",
+          "termination_reason": "budget"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:acceptance-stress"
+    },
+    "outcome": "blocked",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 0.4044186930000251
+  },
+  {
+    "after": {
+      "forward-a": 0,
+      "forward-b": 0,
+      "reverse": 1
+    },
+    "after_total": 1,
+    "before": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "before_total": 2,
+    "case": "stress-conflicting-patterns",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 150491136,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "total",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 1,
+          "backend": "ibm_fez",
+          "before_total": 2,
+          "candidates": 2,
+          "legal_candidates": 2,
+          "options": {
+            "acceptance": "total",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 0,
+              "before": 1,
+              "id": "forward-a"
+            },
+            {
+              "after": 0,
+              "before": 1,
+              "id": "forward-b"
+            },
+            {
+              "after": 1,
+              "before": 0,
+              "id": "reverse"
+            }
+          ],
+          "rewrites": 1,
+          "scan_seconds": 8.912e-06,
+          "scans": 3,
+          "search_seconds": 3.1857e-05,
+          "status": "partial",
+          "termination_reason": "no_improving_move"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:acceptance-stress"
+    },
+    "outcome": "partial",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 0.30822447599996394
+  },
+  {
+    "after": {
+      "forward-a": 0,
+      "forward-b": 0,
+      "reverse": 1
+    },
+    "after_total": 1,
+    "before": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "before_total": 2,
+    "case": "stress-conflicting-patterns",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 0,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "random",
+    "outcome": "partial",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 0.012931410999954096
+  },
+  {
+    "case": "stress-conflicting-patterns",
+    "group": "synthetic_ablation",
+    "method": "qrisk",
+    "reason": "worker_wall_time_limit",
+    "repeat": 1,
+    "status": "timeout"
+  },
+  {
+    "after": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "after_total": 2,
+    "before": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "before_total": 2,
+    "case": "stress-conflicting-patterns",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 0,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "qiskit",
+    "outcome": "blocked",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 6.645799999205337e-05
+  },
+  {
+    "after": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "after_total": 2,
+    "before": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "before_total": 2,
+    "case": "stress-conflicting-patterns",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 151326720,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "diagonal",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 2,
+          "backend": "ibm_fez",
+          "before_total": 2,
+          "candidates": 2,
+          "legal_candidates": 2,
+          "options": {
+            "acceptance": "componentwise",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "diagonal"
+          },
+          "pattern_counts": [
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-a"
+            },
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-b"
+            },
+            {
+              "after": 0,
+              "before": 0,
+              "id": "reverse"
+            }
+          ],
+          "rewrites": 0,
+          "scan_seconds": 9.043e-06,
+          "scans": 3,
+          "search_seconds": 2.4977e-05,
+          "status": "blocked",
+          "termination_reason": "no_improving_move"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:acceptance-stress"
+    },
+    "outcome": "blocked",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 0.24984300099993106
+  },
+  {
+    "after": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "after_total": 2,
+    "before": {
+      "forward-a": 1,
+      "forward-b": 1,
+      "reverse": 0
+    },
+    "before_total": 2,
+    "case": "stress-conflicting-patterns",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 150822912,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "global",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 2,
+          "backend": "ibm_fez",
+          "before_total": 2,
+          "candidates": 2,
+          "legal_candidates": 2,
+          "options": {
+            "acceptance": "componentwise",
+            "matching": "global",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-a"
+            },
+            {
+              "after": 1,
+              "before": 1,
+              "id": "forward-b"
+            },
+            {
+              "after": 0,
+              "before": 0,
+              "id": "reverse"
+            }
+          ],
+          "rewrites": 0,
+          "scan_seconds": 2.6909e-05,
+          "scans": 3,
+          "search_seconds": 3.7626e-05,
+          "status": "blocked",
+          "termination_reason": "no_improving_move"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:acceptance-stress"
+    },
+    "outcome": "blocked",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 0.30497022800000195
+  },
+  {
+    "after": {
+      "x-sx": 0
+    },
+    "after_total": 0,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 151269376,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "global",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 0,
+          "backend": "ibm_fez",
+          "before_total": 1,
+          "candidates": 1,
+          "legal_candidates": 1,
+          "options": {
+            "acceptance": "componentwise",
+            "matching": "global",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 0,
+              "before": 1,
+              "id": "x-sx"
+            }
+          ],
+          "rewrites": 1,
+          "scan_seconds": 6.879e-06,
+          "scans": 2,
+          "search_seconds": 1.9108e-05,
+          "status": "eliminated",
+          "termination_reason": "no_matches"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:rule-stress"
+    },
+    "outcome": "eliminated",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 0.2929943300000559
+  },
+  {
+    "after": {
+      "x-sx": 1
+    },
+    "after_total": 1,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 151678976,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "diagonal",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 1,
+          "backend": "ibm_fez",
+          "before_total": 1,
+          "candidates": 1,
+          "legal_candidates": 0,
+          "options": {
+            "acceptance": "componentwise",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "diagonal"
+          },
+          "pattern_counts": [
+            {
+              "after": 1,
+              "before": 1,
+              "id": "x-sx"
+            }
+          ],
+          "rewrites": 0,
+          "scan_seconds": 1.632e-06,
+          "scans": 1,
+          "search_seconds": 5.8e-07,
+          "status": "blocked",
+          "termination_reason": "no_improving_move"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:rule-stress"
+    },
+    "outcome": "blocked",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 0.3091082930000084
+  },
+  {
+    "after": {
+      "x-sx": 1
+    },
+    "after_total": 1,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 0,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "qiskit",
+    "outcome": "blocked",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 6.845099994734483e-05
+  },
+  {
+    "after": {
+      "x-sx": 0
+    },
+    "after_total": 0,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 150884352,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "mlirq",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 0,
+          "backend": "ibm_fez",
+          "before_total": 1,
+          "candidates": 1,
+          "legal_candidates": 1,
+          "options": {
+            "acceptance": "componentwise",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 0,
+              "before": 1,
+              "id": "x-sx"
+            }
+          ],
+          "rewrites": 1,
+          "scan_seconds": 2.9850000000000002e-06,
+          "scans": 2,
+          "search_seconds": 1.6794e-05,
+          "status": "eliminated",
+          "termination_reason": "no_matches"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:rule-stress"
+    },
+    "outcome": "eliminated",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 0.2875346409999793
+  },
+  {
+    "after": {
+      "x-sx": 0
+    },
+    "after_total": 0,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 150347776,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "total",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 0,
+          "backend": "ibm_fez",
+          "before_total": 1,
+          "candidates": 1,
+          "legal_candidates": 1,
+          "options": {
+            "acceptance": "total",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 0,
+              "before": 1,
+              "id": "x-sx"
+            }
+          ],
+          "rewrites": 1,
+          "scan_seconds": 2.964e-06,
+          "scans": 2,
+          "search_seconds": 1.7346e-05,
+          "status": "eliminated",
+          "termination_reason": "no_matches"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:rule-stress"
+    },
+    "outcome": "eliminated",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 0.2907353630000671
+  },
+  {
+    "after": {
+      "x-sx": 1
+    },
+    "after_total": 1,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 0,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "random",
+    "outcome": "blocked",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 0.012567656999976862
+  },
+  {
+    "after": {
+      "x-sx": 0
+    },
+    "after_total": 0,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 0,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "qrisk",
+    "outcome": "eliminated",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 0.0007905940000227929
+  },
+  {
+    "after": {
+      "x-sx": 0
+    },
+    "after_total": 0,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 151330816,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "local",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 0,
+          "backend": "ibm_fez",
+          "before_total": 1,
+          "candidates": 1,
+          "legal_candidates": 1,
+          "options": {
+            "acceptance": "local",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 0,
+              "before": 1,
+              "id": "x-sx"
+            }
+          ],
+          "rewrites": 1,
+          "scan_seconds": 2.7950000000000003e-06,
+          "scans": 2,
+          "search_seconds": 1.6575e-05,
+          "status": "eliminated",
+          "termination_reason": "no_matches"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:rule-stress"
+    },
+    "outcome": "eliminated",
+    "repeat": 0,
+    "status": "ok",
+    "wall_seconds": 0.3164142419999507
+  },
+  {
+    "after": {
+      "x-sx": 0
+    },
+    "after_total": 0,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 151674880,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "mlirq",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 0,
+          "backend": "ibm_fez",
+          "before_total": 1,
+          "candidates": 1,
+          "legal_candidates": 1,
+          "options": {
+            "acceptance": "componentwise",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 0,
+              "before": 1,
+              "id": "x-sx"
+            }
+          ],
+          "rewrites": 1,
+          "scan_seconds": 2.813e-06,
+          "scans": 2,
+          "search_seconds": 1.7176e-05,
+          "status": "eliminated",
+          "termination_reason": "no_matches"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:rule-stress"
+    },
+    "outcome": "eliminated",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 0.2895877839999912
+  },
+  {
+    "after": {
+      "x-sx": 0
+    },
+    "after_total": 0,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 0,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "qrisk",
+    "outcome": "eliminated",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 0.0008869560000448473
+  },
+  {
+    "after": {
+      "x-sx": 1
+    },
+    "after_total": 1,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 0,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "qiskit",
+    "outcome": "blocked",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 6.703899998683482e-05
+  },
+  {
+    "after": {
+      "x-sx": 0
+    },
+    "after_total": 0,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 150097920,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "local",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 0,
+          "backend": "ibm_fez",
+          "before_total": 1,
+          "candidates": 1,
+          "legal_candidates": 1,
+          "options": {
+            "acceptance": "local",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 0,
+              "before": 1,
+              "id": "x-sx"
+            }
+          ],
+          "rewrites": 1,
+          "scan_seconds": 2.864e-06,
+          "scans": 2,
+          "search_seconds": 1.7886e-05,
+          "status": "eliminated",
+          "termination_reason": "no_matches"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:rule-stress"
+    },
+    "outcome": "eliminated",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 0.2972017590000178
+  },
+  {
+    "after": {
+      "x-sx": 1
+    },
+    "after_total": 1,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 150331392,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "diagonal",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 1,
+          "backend": "ibm_fez",
+          "before_total": 1,
+          "candidates": 1,
+          "legal_candidates": 0,
+          "options": {
+            "acceptance": "componentwise",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "diagonal"
+          },
+          "pattern_counts": [
+            {
+              "after": 1,
+              "before": 1,
+              "id": "x-sx"
+            }
+          ],
+          "rewrites": 0,
+          "scan_seconds": 1.713e-06,
+          "scans": 1,
+          "search_seconds": 5.21e-07,
+          "status": "blocked",
+          "termination_reason": "no_improving_move"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:rule-stress"
+    },
+    "outcome": "blocked",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 0.24205530100005035
+  },
+  {
+    "after": {
+      "x-sx": 0
+    },
+    "after_total": 0,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 0,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "random",
+    "outcome": "eliminated",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 0.01246900299997833
+  },
+  {
+    "after": {
+      "x-sx": 0
+    },
+    "after_total": 0,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 151265280,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "global",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 0,
+          "backend": "ibm_fez",
+          "before_total": 1,
+          "candidates": 1,
+          "legal_candidates": 1,
+          "options": {
+            "acceptance": "componentwise",
+            "matching": "global",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 0,
+              "before": 1,
+              "id": "x-sx"
+            }
+          ],
+          "rewrites": 1,
+          "scan_seconds": 6.4390000000000005e-06,
+          "scans": 2,
+          "search_seconds": 1.2419e-05,
+          "status": "eliminated",
+          "termination_reason": "no_matches"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:rule-stress"
+    },
+    "outcome": "eliminated",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 0.2889035870000498
+  },
+  {
+    "after": {
+      "x-sx": 0
+    },
+    "after_total": 0,
+    "before": {
+      "x-sx": 1
+    },
+    "before_total": 1,
+    "case": "stress-axis-rule",
+    "equivalence": {
+      "active_qubits": 1,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "synthetic_ablation",
+    "memory": {
+      "native_child_peak_rss_bytes": 151511040,
+      "worker_peak_rss_bytes": 172060672
+    },
+    "method": "total",
+    "native": {
+      "circuits": [
+        {
+          "after_total": 0,
+          "backend": "ibm_fez",
+          "before_total": 1,
+          "candidates": 1,
+          "legal_candidates": 1,
+          "options": {
+            "acceptance": "total",
+            "matching": "scoped",
+            "max_candidates": 10000,
+            "max_rewrites": 0,
+            "rules": "all"
+          },
+          "pattern_counts": [
+            {
+              "after": 0,
+              "before": 1,
+              "id": "x-sx"
+            }
+          ],
+          "rewrites": 1,
+          "scan_seconds": 3.044e-06,
+          "scans": 2,
+          "search_seconds": 8.5456e-05,
+          "status": "eliminated",
+          "termination_reason": "no_matches"
+        }
+      ],
+      "mode": "mitigate",
+      "schema_version": 1,
+      "source_url": "synthetic:rule-stress"
+    },
+    "outcome": "eliminated",
+    "repeat": 1,
+    "status": "ok",
+    "wall_seconds": 0.2927879059999441
+  }
+]

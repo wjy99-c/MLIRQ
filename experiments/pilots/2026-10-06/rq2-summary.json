@@ -1,0 +1,225 @@
+{
+  "common_eligible_subset": [
+    {
+      "after_total": 0,
+      "before_total": 10,
+      "group": "constructed_fixture",
+      "method": "mlirq",
+      "paired_rows": 4,
+      "unique_circuits": 4
+    },
+    {
+      "after_total": 10,
+      "before_total": 10,
+      "group": "constructed_fixture",
+      "method": "qiskit",
+      "paired_rows": 4,
+      "unique_circuits": 4
+    },
+    {
+      "after_total": 5,
+      "before_total": 10,
+      "group": "constructed_fixture",
+      "method": "qrisk",
+      "paired_rows": 4,
+      "unique_circuits": 4
+    },
+    {
+      "after_total": 4,
+      "before_total": 10,
+      "group": "constructed_fixture",
+      "method": "random",
+      "paired_rows": 4,
+      "unique_circuits": 4
+    },
+    {
+      "after_total": 0,
+      "before_total": 0,
+      "group": "generated_workload",
+      "method": "mlirq",
+      "paired_rows": 10,
+      "unique_circuits": 10
+    },
+    {
+      "after_total": 0,
+      "before_total": 0,
+      "group": "generated_workload",
+      "method": "qiskit",
+      "paired_rows": 10,
+      "unique_circuits": 10
+    },
+    {
+      "after_total": 0,
+      "before_total": 0,
+      "group": "generated_workload",
+      "method": "qrisk",
+      "paired_rows": 10,
+      "unique_circuits": 10
+    },
+    {
+      "after_total": 0,
+      "before_total": 0,
+      "group": "generated_workload",
+      "method": "random",
+      "paired_rows": 10,
+      "unique_circuits": 10
+    }
+  ],
+  "eligible_rows": 62,
+  "failures": 0,
+  "groups": [
+    {
+      "after_total": 5,
+      "attempted_rows": 6,
+      "before_total": 15,
+      "eligible_rows": 6,
+      "group": "constructed_fixture",
+      "initial_match_rows": 6,
+      "median_seconds": 0.347269107999864,
+      "method": "mlirq",
+      "outcomes": {
+        "blocked": 2,
+        "eliminated": 4
+      },
+      "p90_seconds": 0.3655125269999644,
+      "status_counts": {
+        "ok": 6
+      },
+      "unique_circuits": 6
+    },
+    {
+      "after_total": 15,
+      "attempted_rows": 6,
+      "before_total": 15,
+      "eligible_rows": 6,
+      "group": "constructed_fixture",
+      "initial_match_rows": 6,
+      "median_seconds": 6.993049987613631e-05,
+      "method": "qiskit",
+      "outcomes": {
+        "blocked": 6
+      },
+      "p90_seconds": 7.143799984987709e-05,
+      "status_counts": {
+        "ok": 6
+      },
+      "unique_circuits": 6
+    },
+    {
+      "after_total": 5,
+      "attempted_rows": 6,
+      "before_total": 10,
+      "eligible_rows": 4,
+      "group": "constructed_fixture",
+      "initial_match_rows": 4,
+      "median_seconds": 0.0012894125000002532,
+      "method": "qrisk",
+      "outcomes": {
+        "blocked": 2,
+        "eliminated": 2
+      },
+      "p90_seconds": 0.0014665469999727066,
+      "status_counts": {
+        "ineligible": 2,
+        "ok": 4
+      },
+      "unique_circuits": 6
+    },
+    {
+      "after_total": 6,
+      "attempted_rows": 6,
+      "before_total": 15,
+      "eligible_rows": 6,
+      "group": "constructed_fixture",
+      "initial_match_rows": 6,
+      "median_seconds": 0.019398847999582358,
+      "method": "random",
+      "outcomes": {
+        "blocked": 2,
+        "eliminated": 1,
+        "partial": 3
+      },
+      "p90_seconds": 0.02406810599995879,
+      "status_counts": {
+        "ok": 6
+      },
+      "unique_circuits": 6
+    },
+    {
+      "after_total": 0,
+      "attempted_rows": 10,
+      "before_total": 0,
+      "eligible_rows": 10,
+      "group": "generated_workload",
+      "initial_match_rows": 0,
+      "median_seconds": 0.3195992060001345,
+      "method": "mlirq",
+      "outcomes": {
+        "no_matches": 10
+      },
+      "p90_seconds": 0.3474173776999805,
+      "status_counts": {
+        "ok": 10
+      },
+      "unique_circuits": 10
+    },
+    {
+      "after_total": 0,
+      "attempted_rows": 10,
+      "before_total": 0,
+      "eligible_rows": 10,
+      "group": "generated_workload",
+      "initial_match_rows": 0,
+      "median_seconds": 7.57290001729416e-05,
+      "method": "qiskit",
+      "outcomes": {
+        "no_matches": 10
+      },
+      "p90_seconds": 9.859950012014446e-05,
+      "status_counts": {
+        "ok": 10
+      },
+      "unique_circuits": 10
+    },
+    {
+      "after_total": 0,
+      "attempted_rows": 10,
+      "before_total": 0,
+      "eligible_rows": 10,
+      "group": "generated_workload",
+      "initial_match_rows": 0,
+      "median_seconds": 0.0012621510001054048,
+      "method": "qrisk",
+      "outcomes": {
+        "no_matches": 10
+      },
+      "p90_seconds": 0.002148410699965097,
+      "status_counts": {
+        "ok": 10
+      },
+      "unique_circuits": 10
+    },
+    {
+      "after_total": 0,
+      "attempted_rows": 10,
+      "before_total": 0,
+      "eligible_rows": 10,
+      "group": "generated_workload",
+      "initial_match_rows": 0,
+      "median_seconds": 0.024825520000035795,
+      "method": "random",
+      "outcomes": {
+        "no_matches": 10
+      },
+      "p90_seconds": 0.027355203199749666,
+      "status_counts": {
+        "ok": 10
+      },
+      "unique_circuits": 10
+    }
+  ],
+  "interpretation": "Smoke/pilot evidence, not a completed paper evaluation. Fixtures and scaling copies are synthetic.",
+  "rows": 64,
+  "rq": "rq2",
+  "schema_version": 1
+}

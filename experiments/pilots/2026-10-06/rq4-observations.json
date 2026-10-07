@@ -1,0 +1,1026 @@
+[
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "ghz-w2-d2-s17",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 1257896400,
+    "outcome": "no_matches",
+    "repeat": 0,
+    "seed_simulator": 779348778,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.017578125,
+    "tvd_before": 0.025390625000000056,
+    "tvd_improvement": 0.007812500000000056
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "ghz-w2-d2-s17",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 1430596308,
+    "outcome": "no_matches",
+    "repeat": 1,
+    "seed_simulator": 1620210970,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.0107421875,
+    "tvd_before": 0.020507812500000056,
+    "tvd_improvement": 0.009765625000000056
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "ghz-w3-d2-s17",
+    "equivalence": {
+      "active_qubits": 3,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 1842474108,
+    "outcome": "no_matches",
+    "repeat": 0,
+    "seed_simulator": 1257861678,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.01953125000000014,
+    "tvd_before": 0.03710937500000003,
+    "tvd_improvement": 0.01757812499999989
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "ghz-w3-d2-s17",
+    "equivalence": {
+      "active_qubits": 3,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 1077428723,
+    "outcome": "no_matches",
+    "repeat": 1,
+    "seed_simulator": 1896610708,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.03125000000000003,
+    "tvd_before": 0.03320312499999992,
+    "tvd_improvement": 0.001953124999999889
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "qft-w2-d2-s17",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 131050073,
+    "outcome": "no_matches",
+    "repeat": 0,
+    "seed_simulator": 770270499,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.03808593749999989,
+    "tvd_before": 0.015624999999999889,
+    "tvd_improvement": -0.0224609375
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "qft-w2-d2-s17",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 1836684131,
+    "outcome": "no_matches",
+    "repeat": 1,
+    "seed_simulator": 1483698253,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.03710937499999989,
+    "tvd_before": 0.03417968749999989,
+    "tvd_improvement": -0.0029296875
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "qft-w3-d2-s17",
+    "equivalence": {
+      "active_qubits": 3,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 502801904,
+    "outcome": "no_matches",
+    "repeat": 0,
+    "seed_simulator": 1513178526,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.0830078125,
+    "tvd_before": 0.1103515625,
+    "tvd_improvement": 0.02734375
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "qft-w3-d2-s17",
+    "equivalence": {
+      "active_qubits": 3,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 228712136,
+    "outcome": "no_matches",
+    "repeat": 1,
+    "seed_simulator": 1842120989,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.10546875,
+    "tvd_before": 0.10546875,
+    "tvd_improvement": 0.0
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "qaoa-w2-d2-s17",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 686672225,
+    "outcome": "no_matches",
+    "repeat": 0,
+    "seed_simulator": 1700571485,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.01976207657338755,
+    "tvd_before": 0.02125354842661245,
+    "tvd_improvement": 0.0014914718532249016
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "qaoa-w2-d2-s17",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 339392644,
+    "outcome": "no_matches",
+    "repeat": 1,
+    "seed_simulator": 422808171,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.03884577642385831,
+    "tvd_before": 0.02464488907338755,
+    "tvd_improvement": -0.014200887350470759
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "qaoa-w3-d2-s17",
+    "equivalence": {
+      "active_qubits": 3,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 1040654966,
+    "outcome": "no_matches",
+    "repeat": 0,
+    "seed_simulator": 772285936,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.0405895376558567,
+    "tvd_before": 0.0402655707359401,
+    "tvd_improvement": -0.0003239669199165962
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "qaoa-w3-d2-s17",
+    "equivalence": {
+      "active_qubits": 3,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 1345322963,
+    "outcome": "no_matches",
+    "repeat": 1,
+    "seed_simulator": 2109942706,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.03466903059890733,
+    "tvd_before": 0.04577772348704974,
+    "tvd_improvement": 0.01110869288814241
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "grover-w2-d2-s17",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 801730017,
+    "outcome": "no_matches",
+    "repeat": 0,
+    "seed_simulator": 1381089826,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.013671875,
+    "tvd_before": 0.017578125,
+    "tvd_improvement": 0.00390625
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "grover-w2-d2-s17",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 1492175948,
+    "outcome": "no_matches",
+    "repeat": 1,
+    "seed_simulator": 1065327356,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.0263671875,
+    "tvd_before": 0.0224609375,
+    "tvd_improvement": -0.00390625
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "grover-w3-d2-s17",
+    "equivalence": {
+      "active_qubits": 3,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 606533033,
+    "outcome": "no_matches",
+    "repeat": 0,
+    "seed_simulator": 454313652,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.0957031250000005,
+    "tvd_before": 0.0761718750000005,
+    "tvd_improvement": -0.01953125
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "grover-w3-d2-s17",
+    "equivalence": {
+      "active_qubits": 3,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 2073140997,
+    "outcome": "no_matches",
+    "repeat": 1,
+    "seed_simulator": 506406736,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.0927734375000005,
+    "tvd_before": 0.0898437500000005,
+    "tvd_improvement": -0.0029296875
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "random-w2-d2-s17",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 683819802,
+    "outcome": "no_matches",
+    "repeat": 0,
+    "seed_simulator": 1223505434,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.02136554938940067,
+    "tvd_before": 0.02439086647440867,
+    "tvd_improvement": 0.0030253170850080002
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "random-w2-d2-s17",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 1304649386,
+    "outcome": "no_matches",
+    "repeat": 1,
+    "seed_simulator": 28478216,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.038182422781379045,
+    "tvd_before": 0.037205860281379045,
+    "tvd_improvement": -0.0009765625
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "random-w3-d2-s17",
+    "equivalence": {
+      "active_qubits": 3,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 292388811,
+    "outcome": "no_matches",
+    "repeat": 0,
+    "seed_simulator": 1575904766,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.02312862441650999,
+    "tvd_before": 0.029462962982599438,
+    "tvd_improvement": 0.006334338566089448
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "before_total": 0,
+    "case": "random-w3-d2-s17",
+    "equivalence": {
+      "active_qubits": 3,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "generated_workload",
+    "method": "mlirq",
+    "order_seed": 2034060980,
+    "outcome": "no_matches",
+    "repeat": 1,
+    "seed_simulator": 577375023,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.05017455195893595,
+    "tvd_before": 0.03582393691650999,
+    "tvd_improvement": -0.014350615042425963
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 1
+    },
+    "before_total": 1,
+    "case": "fixture-plain-r1",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "constructed_fixture",
+    "method": "mlirq",
+    "order_seed": 1270147618,
+    "outcome": "eliminated",
+    "repeat": 0,
+    "seed_simulator": 1685741582,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.013671875,
+    "tvd_before": 0.0341796875,
+    "tvd_improvement": 0.0205078125
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 1
+    },
+    "before_total": 1,
+    "case": "fixture-plain-r1",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "constructed_fixture",
+    "method": "mlirq",
+    "order_seed": 719523883,
+    "outcome": "eliminated",
+    "repeat": 1,
+    "seed_simulator": 873564618,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.01953125,
+    "tvd_before": 0.03125,
+    "tvd_improvement": 0.01171875
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 1
+    },
+    "after_total": 1,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 1
+    },
+    "before_total": 1,
+    "case": "fixture-fenced-r1",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "constructed_fixture",
+    "method": "mlirq",
+    "order_seed": 1575997707,
+    "outcome": "blocked",
+    "repeat": 0,
+    "seed_simulator": 820487302,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.0400390625,
+    "tvd_before": 0.02734375,
+    "tvd_improvement": -0.0126953125
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 1
+    },
+    "after_total": 1,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 1
+    },
+    "before_total": 1,
+    "case": "fixture-fenced-r1",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "constructed_fixture",
+    "method": "mlirq",
+    "order_seed": 1926228847,
+    "outcome": "blocked",
+    "repeat": 1,
+    "seed_simulator": 1225703579,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.0263671875,
+    "tvd_before": 0.0166015625,
+    "tvd_improvement": -0.009765625
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 1
+    },
+    "before_total": 1,
+    "case": "fixture-distractors-r1",
+    "equivalence": {
+      "active_qubits": 3,
+      "full_instrument_max_error": 5.558623601418922e-17,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 7.850462293418876e-17,
+      "status": "passed"
+    },
+    "group": "constructed_fixture",
+    "method": "mlirq",
+    "order_seed": 2106015067,
+    "outcome": "eliminated",
+    "repeat": 0,
+    "seed_simulator": 980188215,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.009765625,
+    "tvd_before": 0.0205078125,
+    "tvd_improvement": 0.0107421875
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 1
+    },
+    "before_total": 1,
+    "case": "fixture-distractors-r1",
+    "equivalence": {
+      "active_qubits": 3,
+      "full_instrument_max_error": 5.558623601418922e-17,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 7.850462293418876e-17,
+      "status": "passed"
+    },
+    "group": "constructed_fixture",
+    "method": "mlirq",
+    "order_seed": 563898901,
+    "outcome": "eliminated",
+    "repeat": 1,
+    "seed_simulator": 1898287016,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.03515625,
+    "tvd_before": 0.0244140625,
+    "tvd_improvement": -0.0107421875
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 4
+    },
+    "before_total": 4,
+    "case": "fixture-plain-r4",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "constructed_fixture",
+    "method": "mlirq",
+    "order_seed": 1632921474,
+    "outcome": "eliminated",
+    "repeat": 0,
+    "seed_simulator": 110685651,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.03222656249994002,
+    "tvd_before": 0.03320312499994002,
+    "tvd_improvement": 0.0009765625
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 4
+    },
+    "before_total": 4,
+    "case": "fixture-plain-r4",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "constructed_fixture",
+    "method": "mlirq",
+    "order_seed": 1024267545,
+    "outcome": "eliminated",
+    "repeat": 1,
+    "seed_simulator": 1022858336,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.03808593749994002,
+    "tvd_before": 0.028320312499940024,
+    "tvd_improvement": -0.009765624999999997
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 4
+    },
+    "after_total": 4,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 4
+    },
+    "before_total": 4,
+    "case": "fixture-fenced-r4",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "constructed_fixture",
+    "method": "mlirq",
+    "order_seed": 512216316,
+    "outcome": "blocked",
+    "repeat": 0,
+    "seed_simulator": 1731253355,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.03710937499994002,
+    "tvd_before": 0.03222656249994002,
+    "tvd_improvement": -0.0048828125
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 4
+    },
+    "after_total": 4,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 4
+    },
+    "before_total": 4,
+    "case": "fixture-fenced-r4",
+    "equivalence": {
+      "active_qubits": 2,
+      "full_instrument_max_error": 0.0,
+      "ideal_tvd": 0.0,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 0.0,
+      "status": "passed"
+    },
+    "group": "constructed_fixture",
+    "method": "mlirq",
+    "order_seed": 1437167290,
+    "outcome": "blocked",
+    "repeat": 1,
+    "seed_simulator": 1131362513,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.03515624999994002,
+    "tvd_before": 0.04296874999994003,
+    "tvd_improvement": 0.007812500000000007
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 4
+    },
+    "before_total": 4,
+    "case": "fixture-distractors-r4",
+    "equivalence": {
+      "active_qubits": 3,
+      "full_instrument_max_error": 8.884797254357542e-16,
+      "ideal_tvd": 1.110223385180849e-16,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 4.47545209131181e-16,
+      "status": "passed"
+    },
+    "group": "constructed_fixture",
+    "method": "mlirq",
+    "order_seed": 1384697723,
+    "outcome": "eliminated",
+    "repeat": 0,
+    "seed_simulator": 1560346866,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.04492187499993991,
+    "tvd_before": 0.036132812499939916,
+    "tvd_improvement": -0.008789062499999993
+  },
+  {
+    "after": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 0
+    },
+    "after_total": 0,
+    "before": {
+      "qrisk-ibm_fez-6830ed7d9cfa6fc5": 4
+    },
+    "before_total": 4,
+    "case": "fixture-distractors-r4",
+    "equivalence": {
+      "active_qubits": 3,
+      "full_instrument_max_error": 8.884797254357542e-16,
+      "ideal_tvd": 1.110223385180849e-16,
+      "instrument_qubit_limit": 4,
+      "metadata_preserved": true,
+      "oracle_scope": "phase-sensitive unitary, zero-input distribution; full quantum/classical instrument up to 4 active qubits",
+      "phase_sensitive_max_error": 4.47545209131181e-16,
+      "status": "passed"
+    },
+    "group": "constructed_fixture",
+    "method": "mlirq",
+    "order_seed": 148474948,
+    "outcome": "eliminated",
+    "repeat": 1,
+    "seed_simulator": 319898597,
+    "shots": 1024,
+    "status": "ok",
+    "tvd_after": 0.03710937499993991,
+    "tvd_before": 0.038085937499939916,
+    "tvd_improvement": 0.000976562500000007
+  }
+]
