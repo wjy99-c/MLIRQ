@@ -1,0 +1,4 @@
+# Tested direct dependencies. Each run also records the complete pip freeze.
+qiskit==2.5.2
+qiskit-aer==0.17.2
+qiskit-ibm-runtime==0.47.0

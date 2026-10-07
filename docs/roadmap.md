@@ -6,9 +6,11 @@
 backend-specific QRisk patterns through equivalent transformations, and return
 the optimized circuit in Qiskit form with an auditable report.
 
-**Status: partially implemented.** The native pattern engine and T1–T4 Python
-bridge/import/export are implemented. Output instruction validation and the
-complete optimization/report API remain TODO. Status was updated on 2026-09-22.
+**Status: implemented for the supported M1 subset.** The complete Python
+optimizer, separate output Target validator, structured native report and
+independent final rescan are implemented. RQ runners and explicit hardware
+preparation/submission/collection are available; hardware efficacy remains
+unevaluated. Status updated on 2026-10-06.
 Checked boxes below refer to code and tests already present. Unchecked boxes
 are implementation TODOs.
 This milestone supersedes the earlier routing/adapter roadmap.
@@ -116,37 +118,36 @@ reduction is valid; universal elimination is not an acceptance requirement.
   Evidence: [native export](../lib/Transforms/QiskitExport.cpp),
   [Qiskit export](../python/mlirq_qiskit/exporter.py), and
   [round-trip tests](../test/python/test_export.py).
-- [ ] **T5 — Input/output instruction validation.** Check each instruction's
+- [x] **T5 — Input/output instruction validation.** Check each instruction's
   operation, ordered physical operands, and parameter values against the
   supplied target before import and after export. Keep this distinct from
   MLIRQ's existing topology-only checks; handle barriers as directives.
-- [ ] **T6 — Complete optimization API and report.** Connect import, initial
+- [x] **T6 — Complete optimization API and report.** Connect import, initial
   scan, mitigation, verification, and export. Return the circuit plus a
   machine-readable report with catalog/target provenance and compiler
   versions. Rescan the exported circuit so reported counts describe what the
   caller actually receives. Preserve no-match/blocked/partial outcomes.
-- [ ] **T7 — Qiskit integration tests.** Verify import/export without rewrites
+- [x] **T7 — Qiskit integration tests.** Verify import/export without rewrites
   first, then mitigation. Test sparse physical indices, nontrivial existing
   layouts, idle/auxiliary wires, global phase, multiple classical registers,
   partial measurements, barriers, backend mismatch, unsupported instructions,
   illegal target instructions, and unchanged inputs. Compare complex amplitudes
   on small unitary cases and ideal measured distributions with exact bit
   mappings. Check final pattern counts independently in test fixtures.
-  T1–T4 tests now cover round trips, phase-sensitive operators, exact measured
-  distributions, barriers, layouts, metadata isolation, and exported Fez
-  mitigation/rescanning. Complete optimization/report API coverage awaits T6.
-- [ ] **T8 — Reproducible example and CI.** Add a Python example in which the
+  Evidence: `test/python/test_optimizer.py`, `test/python/test_experiments.py`,
+  and the existing import/export regressions. The RQ1 runner also records
+  generated-circuit checks and invalid-input rejection.
+- [x] **T8 — Reproducible example and CI.** Add a Python example in which the
   caller compiles with Qiskit, passes the result into MLIRQ, and receives an
   equivalent target-legal circuit with fewer occurrences. Use deterministic
   offline targets and toy catalogs for the guaranteed-reduction integration
   test; retain the historical QRisk examples separately. Document installation,
   supported inputs, API usage, and error behavior; run adapter tests in CI.
-  A conversion round-trip example and adapter CI now exist. This task still
-  requires the complete optimization/report example with a deterministic
-  post-compilation reduction fixture.
+  Evidence: `examples/optimize-qiskit.py`, the deterministic post-transpile
+  regression, and CI smoke runs for each RQ. See `docs/experiments.md`.
 
-T1–T4 establish the conversion round trip. T5–T6 make it a validated optimization
-API. T7–T8 provide the evidence and usable example needed to complete M1.
+T1–T8 now establish the supported conversion/optimization contract. This is
+implementation evidence, not a completed hardware or paper evaluation.
 
 ### M1 completion criteria
 

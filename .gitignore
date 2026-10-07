@@ -4,3 +4,8 @@ __pycache__/
 /.venv/
 *.egg-info/
 /dist/
+
+/.cache/
+/results/
+/hardware-runs/
+/*.log

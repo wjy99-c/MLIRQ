@@ -52,11 +52,12 @@ class ImportedCircuit:
 
 @dataclass(frozen=True)
 class NativeResult:
-    """Verified native output with export context; a Python report is a later task."""
+    """Verified native output with export context; including a versioned, structured native report."""
 
     module: ImportedCircuit
     mode: str
     diagnostics: str
+    report: dict | None = None
 
     @property
     def mlir(self) -> str:

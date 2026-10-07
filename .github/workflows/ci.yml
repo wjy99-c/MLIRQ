@@ -30,10 +30,32 @@ jobs:
           python3 -m venv .venv
           .venv/bin/python -m pip wheel --no-deps --wheel-dir dist .
           .venv/bin/python test/check_wheel.py dist/mlirq_qiskit-*.whl
-          .venv/bin/python -m pip install dist/mlirq_qiskit-*.whl "qiskit==${{ matrix.qiskit }}"
+          .venv/bin/python -m pip install dist/mlirq_qiskit-*.whl "qiskit==${{ matrix.qiskit }}" "qiskit-aer==0.17.2" "qiskit-ibm-runtime==0.47.0"
       - name: Qiskit import, export, and native bridge
         env:
           MLIRQ_OPT: ${{ github.workspace }}/build/bin/mlirq-opt
         run: |
           .venv/bin/python -m unittest discover -s test/python -v
           .venv/bin/python examples/import-qiskit.py
+          .venv/bin/python examples/optimize-qiskit.py
+      - name: Experiment smoke and hardware preparation without credentials
+        env:
+          OMP_NUM_THREADS: "1"
+          OPENBLAS_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+        run: |
+          .venv/bin/python scripts/fetch-qrisk.py
+          scripts/run-rq1.sh --limit 2 --output results/ci-rq1
+          scripts/run-rq2.sh --limit 1 --output results/ci-rq2
+          scripts/run-rq3.sh --limit 1 --output results/ci-rq3
+          scripts/run-rq4.sh --limit 1 --shots 128 --output results/ci-rq4
+          .venv/bin/python -m mlirq_qiskit.experiments.hardware prepare --offline --output hardware-runs/ci
+          .venv/bin/python -m mlirq_qiskit.experiments.hardware submit --output hardware-runs/ci
+      - name: Preserve smoke artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: experiment-smoke-qiskit-${{ matrix.qiskit }}
+          path: |
+            results/
+            hardware-runs/ci/

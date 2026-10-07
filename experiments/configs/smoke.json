@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "backend_class": "FakeFez",
+  "backend_name": "ibm_fez",
+  "seeds": [17],
+  "widths": [2, 3],
+  "depths": [2],
+  "families": ["ghz", "qft", "qaoa", "grover", "random"],
+  "optimization_level": 3,
+  "initial_layout": [2, 3, 4, 16, 17, 18],
+  "fixture_repetitions": [1, 4],
+  "catalog_scales": [1, 4],
+  "repeats": 2,
+  "shots": 1024,
+  "max_oracle_qubits": 8,
+  "max_candidates": 10000,
+  "random_attempts": 100,
+  "timeout_seconds": 60
+}

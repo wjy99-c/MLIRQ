@@ -19,11 +19,12 @@ after Qiskit's layout, routing, gate translation, and optimization, before timin
 scheduling. The caller performs Qiskit compilation before invoking MLIRQ.
 MLIRQ does not rerun those stages in this workflow.
 
-**Current status: M1 is partially implemented.** The native C++/TableGen MLIR
-core already scans and mitigates patterns in physically mapped textual MLIR.
-The Python/native bridge and Qiskit import/export round trip (T1–T4) are
-implemented, including metadata and barrier preservation. The complete
-optimization/report API and output instruction validation remain TODO.
+**Current status: M1 is implemented for the supported circuit subset.**
+`optimize_compiled_circuit()` connects import, native mitigation, checked export,
+output Target validation, and an independent final rescan. It returns a new
+Qiskit circuit and structured report. Experiment runners for RQ1–RQ4 and an
+explicit hardware prepare/submit/collect workflow are in
+[docs/experiments.md](docs/experiments.md). Hardware efficacy remains unevaluated.
 
 ## Implemented
 
@@ -127,12 +128,11 @@ remain only in the regression fixtures.
 - [x] Accept a compiled Qiskit circuit and its backend/target without remapping it.
 - [x] Preserve circuit width, layouts, phase, classical-bit mapping, and barriers during conversion.
 - [x] Export the optimized native order as a new Qiskit circuit without recompiling.
-- [ ] Return an optimized Qiskit circuit and a structured report; validate native instructions before and after.
+- [x] Return an optimized Qiskit circuit and a structured report; validate native instructions before and after.
 - [x] Run Qiskit round-trip/equivalence tests in CI.
-- [ ] Complete integration coverage and the full optimization/report example.
+- [x] Complete integration coverage and the full optimization/report example.
 
-Checked items describe the existing components; the complete Qiskit-to-Qiskit
-workflow is still in progress. The ordered task list, supported input scope, and
+Checked items describe the supported, implemented Qiskit-to-Qiskit workflow. The ordered task list, supported input scope, and
 completion criteria are in [docs/roadmap.md](docs/roadmap.md). M1 is complete when
 a caller can pass in Qiskit's compiled circuit and receive the verified optimized
 circuit plus report. Blocked patterns remain visible; zero occurrences are not
@@ -144,7 +144,7 @@ are foundation utilities, outside the M1 post-compilation path. See
 
 Local build and test evidence is recorded in [docs/validation.md](docs/validation.md).
 
-## Python circuit conversion and native bridge (T1–T4)
+## Python circuit conversion and optimization (T1–T8)
 
 After building the native compiler, install the Python package and run the
 offline round-trip example:
@@ -163,3 +163,33 @@ returns a native result. `export_qiskit_circuit(result, compiler=compiler)`
 exports that result as a new Qiskit circuit. See
 [docs/qiskit-adapter.md](docs/qiskit-adapter.md) for the API, supported input
 subset, errors, and tests.
+
+## Run the experiments
+
+```sh
+bash scripts/setup-experiments.sh
+scripts/run-rq1.sh --output results/rq1
+scripts/run-rq2.sh --output results/rq2
+scripts/run-rq3.sh --output results/rq3
+scripts/run-rq4.sh --output results/rq4-simulator
+```
+
+The default is a small offline smoke study using IBM FakeFez and Qiskit Aer.
+Each command saves raw circuits, JSONL/CSV results, calibration/catalog
+snapshots, seeds and version hashes. Larger configurations, held-out QPY
+inputs, baseline definitions and the user-operated hardware commands are in
+[the experiment guide](docs/experiments.md). Simulator results do not establish
+hardware improvement, and constructed fixtures are reported separately.
+
+```python
+from mlirq_qiskit import NativeCompiler, optimize_compiled_circuit
+
+# compiled was already transpiled with this backend's Target.
+result = optimize_compiled_circuit(
+    compiled, backend_name="ibm_fez", target=backend.target,
+    patterns="patterns/qrisk-imported.json",
+    compiler=NativeCompiler("build/bin/mlirq-opt"),
+)
+optimized = result.circuit
+print(result.report["before"], result.report["after"])
+```
