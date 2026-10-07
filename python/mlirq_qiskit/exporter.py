@@ -105,7 +105,8 @@ def export_qiskit_circuit(
 
     Runs native IR/topology verification and the structured export pass. Only
     the current reorder-only transformation contract is supported. This does
-    not transpile, run mitigation, or provide the later T5/T6 validation/report API.
+    not transpile or run mitigation. optimize_compiled_circuit adds independent
+    output Target validation and final pattern reports.
     """
     if isinstance(module, NativeResult):
         module = module.module

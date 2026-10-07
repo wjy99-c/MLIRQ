@@ -2,3 +2,12 @@ build
 .git
 __pycache__
 *.pyc
+
+.cache
+results
+hardware-runs
+*.log
+
+.venv
+dist
+*.egg-info

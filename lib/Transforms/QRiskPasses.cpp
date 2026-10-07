@@ -7,6 +7,10 @@
 #include "mlir/Pass/Pass.h"
 #include "llvm/Support/JSON.h"
 #include "llvm/Support/MemoryBuffer.h"
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/FormatVariadic.h"
+#include "llvm/Support/raw_ostream.h"
+#include <chrono>
 #include <algorithm>
 #include <cmath>
 #include <initializer_list>
@@ -204,14 +208,16 @@ struct Occurrence {
 using Counts = std::vector<int64_t>;
 
 std::vector<Occurrence> findMatches(const Trace &trace,
-                                    const std::vector<const Pattern *> &patterns) {
+                                    const std::vector<const Pattern *> &patterns, bool global = false) {
   std::vector<Occurrence> matches;
   for (size_t p = 0; p < patterns.size(); ++p) {
     const Pattern &pattern = *patterns[p];
     std::vector<size_t> projected;
     for (size_t i = 0; i < trace.size(); ++i)
-      if (std::any_of(trace[i].qubits.begin(), trace[i].qubits.end(),
-                      [&](int64_t q) { return pattern.scope.count(q); }))
+      if ((global && (isGate(trace[i].gate) || trace[i].gate == "measure" ||
+                      trace[i].gate == "barrier")) ||
+          (!global && std::any_of(trace[i].qubits.begin(), trace[i].qubits.end(),
+                      [&](int64_t q) { return pattern.scope.count(q); })))
         projected.push_back(i);
     for (size_t start = 0; start + pattern.gates.size() <= projected.size(); ++start) {
       bool matched = true;
@@ -246,7 +252,7 @@ int64_t total(const Counts &counts) {
 
 // The JSON file describes observations, never executable rewrite rules.
 // These identities commute exactly, including phase, for all input states.
-bool commutes(const Event &a, const Event &b) {
+bool commutes(const Event &a, const Event &b, bool diagonalOnly = false) {
   if (!a.movable || !b.movable)
     return false;
   bool disjoint = std::none_of(a.qubits.begin(), a.qubits.end(), [&](int64_t q) {
@@ -259,6 +265,8 @@ bool commutes(const Event &a, const Event &b) {
   };
   if (diagonal(a) && diagonal(b))
     return true;
+  if (diagonalOnly)
+    return false;
   if (a.qubits.size() == 1 && b.qubits.size() == 1)
     return a.gate == b.gate ||
            ((a.gate == "x" || a.gate == "sx") && (b.gate == "x" || b.gate == "sx"));
@@ -271,14 +279,19 @@ bool commutes(const Event &a, const Event &b) {
           ((single.gate == "x" || single.gate == "sx") && single.qubits[0] == cx.qubits[1]));
 }
 
-bool improves(const Counts &candidate, const Counts &current) {
+bool improves(const Counts &candidate, const Counts &current, bool totalOnly) {
   if (total(candidate) >= total(current))
     return false;
   for (size_t i = 0; i < current.size(); ++i)
-    if (candidate[i] > current[i])
+    if (!totalOnly && candidate[i] > current[i])
       return false;
   return true;
 }
+
+struct SearchOptions {
+  bool global = false, totalOnly = false, diagonalOnly = false, localOnly = false;
+  int64_t maxCandidates = 0, maxRewrites = 0;
+};
 
 struct Plan {
   CircuitOp circuit;
@@ -288,11 +301,18 @@ struct Plan {
   std::vector<Occurrence> matches;
   Counts before;
   Counts after;
-  int64_t rewrites = 0;
+  int64_t rewrites = 0, candidates = 0, legalCandidates = 0, scans = 1;
+  bool budgetExhausted = false;
+  double searchSeconds = 0, scanSeconds = 0;
+  SearchOptions options;
 };
 
 void mitigate(Plan &plan) {
   while (!plan.matches.empty()) {
+    if (plan.options.maxRewrites && plan.rewrites >= plan.options.maxRewrites) {
+      plan.budgetExhausted = true;
+      return;
+    }
     bool accepted = false;
     std::vector<Occurrence> acceptedMatches;
     // Restart matching after every accepted change. Overlapping occurrences
@@ -310,15 +330,21 @@ void mitigate(Plan &plan) {
                            }))
             continue;
           for (unsigned direction = 0; direction < (right == left + 1 ? 1u : 2u); ++direction) {
+            if (plan.options.maxCandidates && plan.candidates >= plan.options.maxCandidates) {
+              plan.budgetExhausted = true;
+              return;
+            }
+            ++plan.candidates;
             bool legal = true;
             for (size_t i = left; i < right; ++i)
               if (!commutes(plan.order[direction == 0 ? right : left],
-                            plan.order[direction == 0 ? i : i + 1])) {
+                            plan.order[direction == 0 ? i : i + 1], plan.options.diagonalOnly)) {
                 legal = false;
                 break;
               }
             if (!legal)
               continue;
+            ++plan.legalCandidates;
             Trace candidate = plan.order;
             if (direction == 0)
               std::rotate(candidate.begin() + left, candidate.begin() + right,
@@ -326,9 +352,14 @@ void mitigate(Plan &plan) {
             else
               std::rotate(candidate.begin() + left, candidate.begin() + left + 1,
                           candidate.begin() + right + 1);
-            auto matches = findMatches(candidate, plan.patterns);
+            ++plan.scans;
+            auto scanStart = std::chrono::steady_clock::now();
+            auto matches = findMatches(candidate, plan.patterns, plan.options.global);
+            plan.scanSeconds += std::chrono::duration<double>(
+                std::chrono::steady_clock::now() - scanStart).count();
             auto counts = countMatches(matches, plan.patterns.size());
-            if (!improves(counts, plan.after))
+            if (plan.options.localOnly ? counts[match.pattern] >= plan.after[match.pattern]
+                                       : !improves(counts, plan.after, plan.options.totalOnly))
               continue;
             plan.order = std::move(candidate);
             plan.after = std::move(counts);
@@ -345,7 +376,8 @@ void mitigate(Plan &plan) {
     if (!accepted)
       break;
     plan.matches = std::move(acceptedMatches);
-    // Strictly decreasing nonnegative occurrence counts ensure termination.
+    // Defaults strictly decrease total occurrences. Local-only evaluation
+    // ablations instead require an explicit finite candidate budget.
   }
 }
 
@@ -399,7 +431,10 @@ void attachReport(Plan &plan, const Catalog &catalog, bool transform) {
   if (plan.patterns.empty())
     status = "no_backend_patterns";
   else if (total(plan.after))
-    status = !transform ? "matched" : (plan.rewrites ? "partial" : "blocked");
+    status = !transform ? "matched" :
+        (total(plan.after) > total(plan.before) ? "increased" :
+         (plan.rewrites && total(plan.after) == total(plan.before) ? "unchanged" :
+          (plan.rewrites ? "partial" : "blocked")));
   else if (total(plan.before))
     status = "eliminated";
   NamedAttrList report;
@@ -415,7 +450,36 @@ void attachReport(Plan &plan, const Catalog &catalog, bool transform) {
   plan.circuit->setAttr("mlirq.qrisk.report", report.getDictionary(builder.getContext()));
 }
 
-LogicalResult runQRisk(ModuleOp module, StringRef path, bool transform) {
+llvm::json::Object jsonReport(const Plan &plan, bool transform) {
+  llvm::json::Array counts;
+  for (size_t i = 0; i < plan.patterns.size(); ++i)
+    counts.push_back(llvm::json::Object{{"id", plan.patterns[i]->id},
+                                     {"before", plan.before[i]}, {"after", plan.after[i]}});
+  auto status = plan.circuit->getAttrOfType<DictionaryAttr>("mlirq.qrisk.report")
+                    .getAs<StringAttr>("status").getValue();
+  StringRef reason = plan.budgetExhausted ? "budget" :
+      (plan.matches.empty() ? "no_matches" : (transform ? "no_improving_move" : "scan"));
+  return llvm::json::Object{
+      {"backend", plan.backend}, {"status", status}, {"termination_reason", reason},
+      {"before_total", total(plan.before)}, {"after_total", total(plan.after)},
+      {"rewrites", plan.rewrites}, {"candidates", plan.candidates},
+      {"legal_candidates", plan.legalCandidates}, {"scans", plan.scans},
+      {"search_seconds", plan.searchSeconds}, {"scan_seconds", plan.scanSeconds},
+      {"pattern_counts", std::move(counts)},
+      {"options", llvm::json::Object{{"matching", plan.options.global ? "global" : "scoped"},
+                  {"acceptance", plan.options.localOnly ? "local" :
+                                 (plan.options.totalOnly ? "total" : "componentwise")},
+                  {"rules", plan.options.diagonalOnly ? "diagonal" : "all"},
+                  {"max_candidates", plan.options.maxCandidates},
+                  {"max_rewrites", plan.options.maxRewrites}}}};
+}
+
+LogicalResult runQRisk(ModuleOp module, StringRef path, bool transform,
+                       StringRef reportFile, SearchOptions options = {}) {
+  if (options.maxCandidates < 0 || options.maxRewrites < 0)
+    return module.emitError("QRisk budgets must be nonnegative (zero means unlimited)");
+  if (options.localOnly && (!options.maxCandidates || options.totalOnly))
+    return module.emitError("local-only requires a finite candidate budget and excludes total-only");
   Catalog catalog;
   if (failed(loadCatalog(path, module, catalog)))
     return failure();
@@ -431,6 +495,7 @@ LogicalResult runQRisk(ModuleOp module, StringRef path, bool transform) {
     if (failed(parseTarget(circuit, target)) || failed(verifyMappedCircuit(circuit)))
       return failure();
     Plan plan;
+    plan.options = options;
     plan.circuit = circuit;
     plan.backend = target.name;
     for (const Pattern &pattern : catalog.patterns) {
@@ -442,10 +507,16 @@ LogicalResult runQRisk(ModuleOp module, StringRef path, bool transform) {
     }
     if (failed(buildTrace(circuit, plan.order)))
       return failure();
-    plan.matches = findMatches(plan.order, plan.patterns);
+    auto scanStart = std::chrono::steady_clock::now();
+    plan.matches = findMatches(plan.order, plan.patterns, options.global);
+    plan.scanSeconds = std::chrono::duration<double>(
+        std::chrono::steady_clock::now() - scanStart).count();
     plan.before = plan.after = countMatches(plan.matches, plan.patterns.size());
+    auto start = std::chrono::steady_clock::now();
     if (transform)
       mitigate(plan);
+    plan.searchSeconds = std::chrono::duration<double>(
+        std::chrono::steady_clock::now() - start).count();
     plans.push_back(std::move(plan));
   }
   for (Plan &plan : plans) {
@@ -455,6 +526,22 @@ LogicalResult runQRisk(ModuleOp module, StringRef path, bool transform) {
   }
   if (failed(verify(*working)))
     return module.emitError("QRisk result failed IR/target verification; original module retained");
+  if (!reportFile.empty()) {
+    llvm::json::Array circuits;
+    for (const Plan &plan : plans)
+      circuits.push_back(jsonReport(plan, transform));
+    llvm::json::Object report{{"schema_version", 1}, {"source_url", catalog.source},
+                             {"mode", transform ? "mitigate" : "scan"},
+                             {"circuits", std::move(circuits)}};
+    std::error_code error;
+    llvm::raw_fd_ostream stream(reportFile, error, llvm::sys::fs::OF_Text);
+    if (error)
+      return module.emitError("cannot create QRisk report: ") << error.message();
+    stream << llvm::formatv("{0:2}", llvm::json::Value(std::move(report))) << "\n";
+    stream.flush();
+    if (stream.has_error())
+      return module.emitError("cannot write QRisk report");
+  }
   module.getBodyRegion().takeBody(working->getBodyRegion());
   return success();
 }
@@ -464,10 +551,11 @@ struct QRiskScanPass : PassWrapper<QRiskScanPass, OperationPass<ModuleOp>> {
   QRiskScanPass() = default;
   QRiskScanPass(const QRiskScanPass &other) : PassWrapper(other) {}
   Option<std::string> patternsFile{*this, "patterns-file", llvm::cl::desc("Local QRisk JSON catalog"), llvm::cl::init("")};
+  Option<std::string> reportFile{*this, "report-file", llvm::cl::desc("Optional structured JSON report"), llvm::cl::init("")};
   StringRef getArgument() const final { return "mlirq-qrisk-scan"; }
   StringRef getDescription() const final { return "Report backend-specific QRisk occurrences on mapped physical wires"; }
   void runOnOperation() override {
-    if (failed(runQRisk(getOperation(), patternsFile, false)))
+    if (failed(runQRisk(getOperation(), patternsFile, false, reportFile)))
       signalPassFailure();
   }
 };
@@ -477,10 +565,18 @@ struct QRiskMitigatePass : PassWrapper<QRiskMitigatePass, OperationPass<ModuleOp
   QRiskMitigatePass() = default;
   QRiskMitigatePass(const QRiskMitigatePass &other) : PassWrapper(other) {}
   Option<std::string> patternsFile{*this, "patterns-file", llvm::cl::desc("Local QRisk JSON catalog"), llvm::cl::init("")};
+  Option<std::string> reportFile{*this, "report-file", llvm::cl::desc("Optional structured JSON report"), llvm::cl::init("")};
+  Option<bool> global{*this, "global-matching", llvm::cl::desc("Experimental global trace ablation"), llvm::cl::init(false)};
+  Option<bool> totalOnly{*this, "total-only", llvm::cl::desc("Experimental total-only acceptance ablation"), llvm::cl::init(false)};
+  Option<bool> localOnly{*this, "local-only", llvm::cl::desc("Experimental matched-pattern-only acceptance; requires candidate budget"), llvm::cl::init(false)};
+  Option<bool> diagonalOnly{*this, "diagonal-only", llvm::cl::desc("Experimental diagonal/disjoint rules ablation"), llvm::cl::init(false)};
+  Option<int64_t> maxCandidates{*this, "max-candidates", llvm::cl::desc("Candidate budget; zero is unlimited"), llvm::cl::init(0)};
+  Option<int64_t> maxRewrites{*this, "max-rewrites", llvm::cl::desc("Rewrite budget; zero is unlimited"), llvm::cl::init(0)};
   StringRef getArgument() const final { return "mlirq-qrisk-mitigate"; }
   StringRef getDescription() const final { return "Break QRisk recurrences using exact commuting rewrites and global occurrence checks"; }
   void runOnOperation() override {
-    if (failed(runQRisk(getOperation(), patternsFile, true)))
+    if (failed(runQRisk(getOperation(), patternsFile, true, reportFile,
+        {global, totalOnly, diagonalOnly, localOnly, maxCandidates, maxRewrites})))
       signalPassFailure();
   }
 };

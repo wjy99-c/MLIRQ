@@ -1,11 +1,11 @@
 # Qiskit circuit conversion and native bridge
 
-M1 tasks **T1–T4 are implemented** by the `mlirq-qiskit` Python package.
+M1 tasks **T1–T8 are implemented for the supported subset** by the `mlirq-qiskit` Python package.
 It imports a circuit already compiled by the caller and invokes the existing
 native compiler. `ImportedCircuit`/`NativeResult` contain MLIR and preserved
 input context; `export_qiskit_circuit()` reconstructs a new Qiskit circuit from
-either bundle. Output instruction validation is T5; the complete optimization
-API/report is T6. These calls provide the conversion round trip now.
+either bundle. `optimize_compiled_circuit()` adds output Target validation and
+a structured report with an independent final rescan. See the complete API below.
 
 ## Install and try
 
@@ -43,7 +43,7 @@ module = import_compiled_circuit(
 compiler = NativeCompiler("build/bin/mlirq-opt")
 result = compiler.run(module, mode="mitigate")
 optimized_circuit = export_qiskit_circuit(result, compiler=compiler)
-print(result.mlir)  # Native before/after report; Python report API follows in T6.
+print(result.report)  # Versioned native JSON report.
 ```
 
 `patterns` accepts a JSON file path or a mapping. The importer snapshots its
@@ -63,9 +63,8 @@ temporary working directory. Available modes are:
 | `scan` | Run the existing backend-specific QRisk scan and target verification |
 | `mitigate` | Run the existing equivalent QRisk rewrites and target verification |
 
-Results contain generic MLIR. QRisk reports remain native IR attributes for
-now; the bridge does not parse them with regular expressions or expose a
-completed Python report API. `result.module` carries the result and its input
+Results contain generic MLIR and a separate structured JSON report for scan/mitigate.
+The bridge does not parse printed MLIR reports with regular expressions. `result.module` carries the result and its input
 context together and may be passed to another native call.
 
 `export_qiskit_circuit(module_or_result, *, compiler=None)` accepts an
@@ -94,7 +93,7 @@ circuits. A blocked/no-match native result exports with its unchanged order.
 - Input instructions are checked against their exact ordered physical operands
   and parameter values in the supplied Qiskit `Target`. Native topology is a
   projection of the input's validated two-qubit edges. It is not a complete
-  native-instruction target model; the original target is retained for T5.
+  native-instruction target model; the original target is retained for output instruction validation.
 - Quantum gate parameters use lossless binary64 MLIR attributes. Measurement
   results appear in instruction order, with explicit classical destination
   attributes and an immutable `(instruction_index, physical_qubit, clbit)`
@@ -152,8 +151,9 @@ The output starts with an empty copy of the isolated source circuit. Original
 instruction objects are appended in verified native order, preserving labels
 and parameters. Layout, global phase, circuit name, arbitrary metadata, bit
 ordering, and registers survive without remapping. The native global-phase
-record must agree with the source. Export does not yet run the separate T5
-Qiskit target-instruction checker or return the T6 structured report.
+record must agree with the source. This low-level export function handles
+reconstruction; `optimize_compiled_circuit()` additionally calls the separate
+Qiskit Target instruction checker and returns the complete report.
 
 ## Errors and tests
 
@@ -187,3 +187,33 @@ Qiskit contracts: [Target instruction support](https://quantum.cloud.ibm.com/doc
 and [TranspileLayout](https://quantum.cloud.ibm.com/docs/en/api/qiskit/qiskit.transpiler.TranspileLayout).
 Circuit reconstruction uses
 [QuantumCircuit.copy_empty_like](https://quantum.cloud.ibm.com/docs/en/api/qiskit/qiskit.circuit.QuantumCircuit#copy_empty_like).
+
+## Complete optimization and output validation (T5–T8)
+
+`optimize_compiled_circuit(circuit, backend_name=..., target=..., patterns=...,
+compiler=...)` returns `OptimizationResult(circuit, report)`. It snapshots and
+imports input, invokes native mitigation, exports verified schema-2 JSON,
+validates every output instruction against the snapshotted Target, and rescans
+the final Qiskit circuit independently. Report/native disagreement fails with
+`report_count_mismatch`; the input remains unchanged on failure.
+
+The JSON-serializable report includes catalog/Target/native-binary hashes,
+Qiskit/interchange versions, native status and budget termination, per-pattern
+before/after counts, final scoped counts, validation and stage timings.
+`validate_target_instructions(circuit, target)` exposes the output check
+separately from native topology verification. Standard gate classes, ordered
+operands, concrete parameter values and physical-wire lifetimes are checked;
+barriers are handled as directives.
+
+Native scan/mitigate passes accept `report-file=report.json` and emit a separate
+schema-1 report containing one entry per circuit. The schema-2 Qiskit
+interchange contract is unchanged. `NativeCompiler.run(...).report` exposes
+this data directly; reports are never parsed from printed MLIR.
+
+`MitigationOptions` exposes finite candidate/rewrite budgets (zero means
+unlimited for standard search). Experimental global matching, total-only or
+local-only acceptance, and diagonal-only rules support RQ3. Local-only
+acceptance requires a positive candidate budget because it can cycle and can
+increase other patterns. These opt-in settings change the default guarantees.
+Budget exhaustion is explicit in `termination_reason`; unresolved matches
+remain in the final report. See [experiments](experiments.md).

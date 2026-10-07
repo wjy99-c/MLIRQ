@@ -1,0 +1,81 @@
+{
+  "backend_snapshot_sha256": "cfaea5bf96d929799b6073d0a188f8f911b5f82d209a5a1cf4cbebfbdef81407",
+  "catalog_sha256": "e2f28fe7900baf14dd5b3d890b106cde6ce855332ef49d01d71db97d8346bd1e",
+  "config": {
+    "backend_class": "FakeFez",
+    "backend_name": "ibm_fez",
+    "catalog_scales": [
+      1,
+      4
+    ],
+    "depths": [
+      2
+    ],
+    "families": [
+      "ghz",
+      "qft",
+      "qaoa",
+      "grover",
+      "random"
+    ],
+    "fixture_repetitions": [
+      1,
+      4
+    ],
+    "initial_layout": [
+      2,
+      3,
+      4,
+      16,
+      17,
+      18
+    ],
+    "max_candidates": 10000,
+    "max_oracle_qubits": 8,
+    "optimization_level": 3,
+    "random_attempts": 100,
+    "repeats": 2,
+    "schema_version": 1,
+    "seeds": [
+      17
+    ],
+    "shots": 1024,
+    "timeout_seconds": 60,
+    "widths": [
+      2,
+      3
+    ]
+  },
+  "cpu_count": 9,
+  "created_utc": "2026-10-07T00:54:53.255181+00:00",
+  "git_dirty": false,
+  "git_revision": "5dc13a4d0b453d3e8ddd131147b444ef4b4856fd",
+  "hardware_submitted": false,
+  "input_directory": null,
+  "invocation": [
+    "/workspace/scratch/3ed51fe1f8da/mlirq-experiments/python/mlirq_qiskit/experiments/__main__.py",
+    "rq1",
+    "--output",
+    "results/rq1-5dc13a4"
+  ],
+  "limit": null,
+  "native_binary_sha256": "6f6fed7db601d873eda219305e20b40310497892c8f3c4b356598cd705dd4bdf",
+  "native_version": "Ubuntu LLVM version 18.1.3\n  Optimized build.",
+  "packages": {
+    "mlirq-qiskit": "0.3.0",
+    "numpy": "2.5.3",
+    "qiskit": "2.5.2",
+    "qiskit-aer": "0.17.2",
+    "qiskit-ibm-runtime": "0.47.0"
+  },
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "rq": "rq1",
+  "schema_version": 1,
+  "simulator_interpretation": "Calibration-based local noise; not a model of QRisk contextual hardware faults.",
+  "thread_environment": {
+    "MKL_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1"
+  }
+}

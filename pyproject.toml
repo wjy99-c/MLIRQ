@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mlirq-qiskit"
-version = "0.2.0"
+version = "0.3.0"
 description = "Post-Qiskit circuit conversion and QRisk native compiler bridge"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -15,3 +15,10 @@ where = ["python"]
 
 [tool.setuptools.package-data]
 mlirq_qiskit = ["py.typed"]
+
+[project.optional-dependencies]
+experiments = ["qiskit-aer==0.17.2", "qiskit-ibm-runtime==0.47.0"]
+
+[project.scripts]
+mlirq-experiment = "mlirq_qiskit.experiments.runner:main"
+mlirq-hardware = "mlirq_qiskit.experiments.hardware:main"
