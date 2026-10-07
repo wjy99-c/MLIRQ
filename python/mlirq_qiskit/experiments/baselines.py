@@ -78,7 +78,7 @@ def random_legal(circuit, seed, attempts):
     for item in order:
         output.append(item.operation, [output.qubits[circuit.find_bit(q).index] for q in item.qubits],
                       [output.clbits[circuit.find_bit(c).index] for c in item.clbits])
-    return output, {"attempt_budget": attempts, "accepted_adjacent_swaps": accepted,
+    return output, {"seed": seed, "attempt_budget": attempts, "accepted_adjacent_swaps": accepted,
                     "semantics_check": "phase-sensitive exact small matrices, tolerance 1e-12"}
 
 

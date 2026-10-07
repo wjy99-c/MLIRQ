@@ -7,7 +7,7 @@ from unittest.mock import patch
 import numpy as np
 from qiskit import QuantumCircuit
 from mlirq_qiskit.experiments.baselines import random_legal, qrisk_transform
-from mlirq_qiskit.experiments.common import (digest, equivalence, ideal_distribution, instrument,
+from mlirq_qiskit.experiments.common import (derived_seed, digest, equivalence, ideal_distribution, instrument,
                                             paired_bootstrap, save_circuit, write_json, read_json)
 from mlirq_qiskit.experiments import hardware
 from mlirq_qiskit.experiments.runner import summary
@@ -15,6 +15,13 @@ from test_adapter import make_target, catalog
 
 
 class ExperimentTests(unittest.TestCase):
+    def test_random_streams_are_reproducible_and_distinct(self):
+        keys = [(seed, case, repeat, stream) for seed in [17, 29] for case in ["a", "b"]
+                for repeat in [0, 1] for stream in ["simulator", "pub-order", "baseline"]]
+        values = [derived_seed(*key) for key in keys]
+        self.assertEqual(values, [derived_seed(*key) for key in keys])
+        self.assertEqual(len(values), len(set(values)))
+
     def test_oracle_detects_phase_and_measurement_map_errors(self):
         a = QuantumCircuit(2, 2); a.h(0); a.h(1); a.measure([0, 1], [0, 1])
         phase = a.copy(); phase.global_phase = .1

@@ -15,7 +15,7 @@ from mlirq_qiskit import (MLIRQError, NativeCompiler, MitigationOptions,
                          import_compiled_circuit, optimize_compiled_circuit,
                          validate_target_instructions)
 from mlirq_qiskit.matching import count_patterns
-from .common import (ROOT, digest, equivalence, ideal_distribution, load_circuit,
+from .common import (ROOT, derived_seed, digest, equivalence, ideal_distribution, load_circuit,
                      manifest, metrics, paired_bootstrap, probabilities, read_json,
                      save_circuit, snapshot_backend, tvd, write_json)
 from .workloads import cases
@@ -144,7 +144,7 @@ def run_worker(case, method, repeat, config, compiler, directory):
                "--input", str(input_path), "--output", str(directory / "output.qpy"),
                "--report", str(directory / "worker.json"), "--catalog", str(directory.parent / "catalog.json"),
                "--config", str(directory.parents[2] / "config.json"), "--compiler", compiler.executable,
-               "--method", method, "--seed", str(case.seed + repeat)]
+               "--method", method, "--seed", str(derived_seed(case.seed, case.name, repeat, "baseline"))]
     # Independent process also bounds the unmodified upstream QRisk loop.
     try:
         completed = subprocess.run(command, text=True, capture_output=True, timeout=config["timeout_seconds"],
@@ -247,7 +247,7 @@ def run(args):
                 methods += ["global", "total", "local", "diagonal"]
             for repeat in range(config["repeats"] if args.rq == "rq3" else 1):
                 order = methods.copy()
-                random.Random(case.seed + repeat).shuffle(order)
+                random.Random(derived_seed(case.seed, case.name, repeat, "method-order")).shuffle(order)
                 for method in order:
                     row = {**base, "method": method, "repeat": repeat}
                     reason = restrictions(case.circuit) if method == "qrisk" else None
@@ -305,8 +305,9 @@ def run_simulator_pairs(case, base, folder, rows, output, backend, compiler, con
     aer = AerSimulator.from_backend(backend, method="density_matrix", max_parallel_threads=1)
     for repeat in range(config["repeats"]):
         order = ["qiskit", "mlirq"]
-        seed = case.seed + 1009 * repeat
-        random.Random(seed).shuffle(order)
+        seed = derived_seed(case.seed, case.name, repeat, "simulator")
+        order_seed = derived_seed(case.seed, case.name, repeat, "pub-order")
+        random.Random(order_seed).shuffle(order)
         sampler = SamplerV2(mode=aer, options={"simulator": {"seed_simulator": seed}})
         start = time.perf_counter()
         job = sampler.run([case.circuit if name == "qiskit" else result.circuit for name in order],
@@ -315,7 +316,7 @@ def run_simulator_pairs(case, base, folder, rows, output, backend, compiler, con
         counts = {name: pub.join_data().get_counts() for name, pub in zip(order, pubs)}
         before, after = (tvd(probabilities(counts[name]), ideal) for name in ("qiskit", "mlirq"))
         row = {**base, **checks, "method": "mlirq", "repeat": repeat, "shots": config["shots"],
-               "submission_order": order, "seed_simulator": seed, "counts": counts,
+               "submission_order": order, "order_seed": order_seed, "seed_simulator": seed, "counts": counts,
                "tvd_before": before, "tvd_after": after, "tvd_improvement": before-after,
                "wall_seconds": time.perf_counter()-start, "execution": "local_ibm_runtime_aer",
                "simulation_method": "density_matrix", "job_metadata": [p.metadata for p in pubs]}

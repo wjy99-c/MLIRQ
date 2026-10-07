@@ -45,6 +45,11 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def derived_seed(base_seed, case, repeat, stream):
+    """Independent deterministic streams per case/repeat/purpose."""
+    return int(digest([base_seed, case, repeat, stream])[:8], 16) % (2**31 - 1)
+
+
 def save_circuit(path, circuit):
     buffer = io.BytesIO()
     qpy.dump(circuit, buffer)

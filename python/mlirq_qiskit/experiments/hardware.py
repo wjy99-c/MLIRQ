@@ -11,7 +11,7 @@ import uuid
 import numpy as np
 from qiskit import qpy
 from mlirq_qiskit import NativeCompiler, optimize_compiled_circuit, validate_target_instructions
-from .common import (ROOT, digest, equivalence, ideal_distribution, load_circuit,
+from .common import (ROOT, derived_seed, digest, equivalence, ideal_distribution, load_circuit,
                      manifest, paired_bootstrap, probabilities, read_json, save_circuit,
                      snapshot_backend, tvd, write_json)
 from .workloads import cases
@@ -80,9 +80,10 @@ def prepare(args):
         circuit_index.append(item)
         for repeat in range(config["repeats"]):
             order = ["qiskit", "mlirq"]
-            random.Random(case.seed + repeat * 1009).shuffle(order)
+            order_seed = derived_seed(case.seed, case.name, repeat, "pub-order")
+            random.Random(order_seed).shuffle(order)
             batches.append({"batch": len(batches), "case": case.name, "repeat": repeat,
-                            "order": order, "state": "prepared", "job_id": None})
+                            "order": order, "order_seed": order_seed, "state": "prepared", "job_id": None})
     if not batches:
         raise ValueError("No eligible hardware pairs were prepared")
     # Randomize order across circuits/repeats, with paired arms in each job.

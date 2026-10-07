@@ -24,6 +24,8 @@ an ignored cache. It does not require an IBM account. Existing LLVM 18 installs
 can set `MLIR_DIR` and `LLVM_DIR`; use `BUILD_JOBS` to limit build parallelism.
 Direct dependencies are pinned in `experiments/requirements.txt`; every run
 also saves the complete resolved `pip freeze`. LLVM and MLIR must share major 18.
+Random streams are derived deterministically from the base seed, case, repeat
+and purpose; sampling and submission-order streams are distinct.
 
 For a Linux container (also usable through Docker Desktop):
 
