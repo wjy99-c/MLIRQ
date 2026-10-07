@@ -2,6 +2,9 @@
 from pathlib import Path
 from types import SimpleNamespace
 import tempfile
+import subprocess
+import sys
+import time
 import unittest
 from unittest.mock import patch
 import numpy as np
@@ -10,7 +13,7 @@ from mlirq_qiskit.experiments.baselines import random_legal, qrisk_transform
 from mlirq_qiskit.experiments.common import (derived_seed, digest, equivalence, ideal_distribution, instrument,
                                             paired_bootstrap, save_circuit, write_json, read_json)
 from mlirq_qiskit.experiments import hardware
-from mlirq_qiskit.experiments.runner import summary
+from mlirq_qiskit.experiments.runner import bounded_process, summary
 from test_adapter import make_target, catalog
 
 
@@ -21,6 +24,16 @@ class ExperimentTests(unittest.TestCase):
         values = [derived_seed(*key) for key in keys]
         self.assertEqual(values, [derived_seed(*key) for key in keys])
         self.assertEqual(len(values), len(set(values)))
+
+    def test_worker_timeout_terminates_descendants(self):
+        with tempfile.TemporaryDirectory() as work:
+            marker = Path(work)/"descendant-survived"
+            child = "import time,pathlib; time.sleep(0.6); pathlib.Path('descendant-survived').touch()"
+            parent = f"import subprocess,sys,time; subprocess.Popen([sys.executable, '-c', {child!r}]); time.sleep(10)"
+            with self.assertRaises(subprocess.TimeoutExpired):
+                bounded_process([sys.executable, "-c", parent], .2, work)
+            time.sleep(.7)
+            self.assertFalse(marker.exists())
 
     def test_oracle_detects_phase_and_measurement_map_errors(self):
         a = QuantumCircuit(2, 2); a.h(0); a.h(1); a.measure([0, 1], [0, 1])

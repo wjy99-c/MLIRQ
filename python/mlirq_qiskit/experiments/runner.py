@@ -5,8 +5,10 @@ import csv
 from datetime import datetime, timezone
 import itertools
 import json
+import os
 from pathlib import Path
 import random
+import signal
 import subprocess
 import sys
 import time
@@ -137,6 +139,22 @@ def outcome(before, after, active):
     return "blocked" if after == before else "increased"
 
 
+def bounded_process(command, timeout, cwd):
+    """Terminate the worker AND native descendants if its wall budget expires."""
+    process = subprocess.Popen(command, text=True, stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE, cwd=cwd, start_new_session=True)
+    try:
+        stdout, stderr = process.communicate(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        process.communicate()
+        raise
+    return subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
+
+
 def run_worker(case, method, repeat, config, compiler, directory):
     directory.mkdir(parents=True)
     input_path = directory.parent / "input.qpy"
@@ -147,8 +165,7 @@ def run_worker(case, method, repeat, config, compiler, directory):
                "--method", method, "--seed", str(derived_seed(case.seed, case.name, repeat, "baseline"))]
     # Independent process also bounds the unmodified upstream QRisk loop.
     try:
-        completed = subprocess.run(command, text=True, capture_output=True, timeout=config["timeout_seconds"],
-                                   cwd=ROOT, check=False)
+        completed = bounded_process(command, config["timeout_seconds"], ROOT)
     except subprocess.TimeoutExpired as error:
         (directory / "stderr.log").write_text(str(error))
         return None, {"status": "timeout", "reason": "worker_wall_time_limit"}
